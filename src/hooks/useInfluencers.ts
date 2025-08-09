@@ -18,7 +18,7 @@ export const useInfluencers = () => {
     let isMounted = true;
     const fetchInfluencers = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/influencers');
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8001'}/api/influencers`);
         if (isMounted) setInfluencers(response.data);
       } catch (err) {
         if (isMounted) setError(err as Error);

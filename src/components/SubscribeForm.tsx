@@ -25,7 +25,8 @@ export const SubscribeForm = ({
 
   const verifyPin = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/users?phone=${phone}&pin=${pin}`);
+      const base = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8001';
+      const response = await axios.get(`${base}/api/users?phone=${phone}&pin=${pin}`);
       return response.data.length > 0;
     } catch (error) {
       console.error('PIN verification failed:', error);
@@ -35,7 +36,8 @@ export const SubscribeForm = ({
 
   const handleSubscribe = async () => {
     try {
-      await axios.post('http://localhost:3001/subscribers', {
+      const base = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8001';
+      await axios.post(`${base}/api/subscribers`, {
         fan_phone: phone,
         influencer_id: influencerId,
         amount,
