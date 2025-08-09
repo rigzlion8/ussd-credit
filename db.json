@@ -1,0 +1,114 @@
+{
+  "influencers": [
+    {
+      "id": 1,
+      "phone": "254712345678",
+      "name": "Jane Doe",
+      "imageUrl": "/images/jane_doe.jpg",
+      "ussd_shortcode": "1234",
+      "received": 500
+    },
+    {
+      "id": 2,
+      "phone": "254722345678",
+      "name": "Wambui Doe",
+      "ussd_shortcode": "1234",
+      "received": 450000
+    },
+    {
+      "id": 3,
+      "phone": "254722345678",
+      "name": "John Wick",
+      "ussd_shortcode": "0000",
+      "imageUrl": "/images/john_wick.jpg",
+      "received": 5235000
+    },
+    {
+      "id": 4,
+      "phone": "254712345000",
+      "name": "Martha Musembi",
+      "ussd_shortcode": "1234",
+      "received": 50050
+    },
+    {
+      "id": 5,
+      "phone": "254722345001",
+      "name": "Wambui Doe",
+      "ussd_shortcode": "1234",
+      "received": 450000
+    },
+    {
+      "id": 6,
+      "phone": "254722345002",
+      "name": "John Wick",
+      "ussd_shortcode": "0000",
+      "received": 3750000
+    }
+  ],
+  "subscribers": [
+    {
+      "id": 1,
+      "fan_phone": "254700000001",
+      "influencer_id": 1,
+      "amount": 10,
+      "frequency": "weekly",
+      "is_active": true
+    },
+    {
+      "id": 2,
+      "fan_phone": "254700000002",
+      "influencer_id": 2,
+      "amount": 520,
+      "frequency": "weekly",
+      "is_active": true
+    },
+    {
+      "id": 3,
+      "fan_phone": "254700000003",
+      "influencer_id": 3,
+      "amount": 1000,
+      "frequency": "monthly",
+      "is_active": true
+    },
+    {
+      "id": 4,
+      "fan_phone": "254700000004",
+      "influencer_id": 4,
+      "amount": 1050,
+      "frequency": "weekly",
+      "is_active": true
+    },
+    {
+      "id": 5,
+      "fan_phone": "254700000005",
+      "influencer_id": 5,
+      "amount": 5200,
+      "frequency": "weekly",
+      "is_active": true
+    },
+    {
+      "id": 6,
+      "fan_phone": "254700000006",
+      "influencer_id": 6,
+      "amount": 10000,
+      "frequency": "monthly",
+      "is_active": true
+    },
+    {
+      "id": "dbad",
+      "fan_phone": "254710000001",
+      "influencer_id": 3,
+      "amount": 10,
+      "frequency": "none",
+      "is_active": true
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "phone": "254710000001",
+      "pin": "4321",
+      "balance": 1000000
+    }
+  ]
+}

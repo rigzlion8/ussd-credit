@@ -1,0 +1,775 @@
+/* Subscribe Form Styles */
+.subscribe-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  color: #2c3e50;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.ussd-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #34495e;
+  font-size: 0.9rem;
+}
+
+.form-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.form-select {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: white;
+}
+
+.submit-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background-color: #2980b9;
+}
+
+.submit-button:active {
+  transform: translateY(1px);
+}
+
+.confirmation-message {
+  text-align: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+
+.confirmation-message p {
+  margin: 8px 0;
+  color: #2c3e50;
+}
+
+.confirmation-message p:first-child {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-logo {
+  height: 40px;
+  width: auto;
+}
+
+.platform-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-links-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.navbar-auth-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-auth {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #34495e;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #3498db;
+}
+
+.navbar-search {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 220px;
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.12);
+}
+
+.auth-link {
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link {
+  color: #3498db;
+  border: 1px solid #3498db;
+}
+
+.login-link:hover {
+  background-color: #f0f8ff;
+}
+
+.signup-link {
+  background-color: #3498db;
+  color: white;
+  border: 1px solid #3498db;
+}
+
+.signup-link:hover {
+  background-color: #2980b9;
+}
+
+/* Existing App Styles (keep these) */
+.App {
+  text-align: center;
+}
+
+.main-content {
+  padding: 2rem;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  background: none;
+  border: 1px solid #3498db;
+  color: #3498db;
+  border-radius: 4px;
+  padding: 8px 14px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.theme-toggle-btn:hover {
+  background: #3498db;
+  color: #fff;
+}
+
+/* Dark Theme Styles */
+.theme-dark {
+  background: #181c23;
+  color: #e0e6ed;
+}
+.theme-dark .navbar {
+  background: #23272f;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+.theme-dark .navbar-logo {
+  filter: brightness(0.8);
+}
+.theme-dark .platform-name {
+  color: #e0e6ed;
+}
+.theme-dark .nav-link {
+  color: #e0e6ed;
+}
+.theme-dark .nav-link:hover {
+  color: #7ecbff;
+}
+.theme-dark .login-link {
+  color: #7ecbff;
+  border-color: #7ecbff;
+}
+.theme-dark .login-link:hover {
+  background: #23272f;
+}
+.theme-dark .signup-link {
+  background: #7ecbff;
+  color: #23272f;
+  border-color: #7ecbff;
+}
+.theme-dark .signup-link:hover {
+  background: #3498db;
+  color: #fff;
+}
+.theme-dark .subscribe-card {
+  background: #23272f;
+  color: #e0e6ed;
+  border-color: #2c3e50;
+}
+.theme-dark .subscribe-card:hover {
+  border-color: #7ecbff;
+  box-shadow: 0 6px 18px rgba(126, 203, 255, 0.10), 0 1.5px 6px rgba(0,0,0,0.18);
+}
+.theme-dark .profile-image-round {
+  border-color: #2c3e50;
+}
+.theme-dark .form-group input,
+.theme-dark .form-group select {
+  background: #23272f;
+  color: #e0e6ed;
+  border: 1px solid #2c3e50;
+}
+.theme-dark .form-group input:focus,
+.theme-dark .form-group select:focus {
+  border-color: #7ecbff;
+  box-shadow: 0 0 0 2px rgba(126, 203, 255, 0.15);
+}
+.theme-dark button,
+.theme-dark .submit-button {
+  background: #7ecbff;
+  color: #23272f;
+}
+.theme-dark button:hover,
+.theme-dark .submit-button:hover {
+  background: #3498db;
+  color: #fff;
+}
+.theme-dark .confirmation {
+  color: #7ecbff;
+}
+.theme-dark .influencer-name {
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 0;
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+}
+.footer-text {
+  color: #888;
+}
+.theme-toggle-btn.small {
+  padding: 4px 8px;
+  font-size: 1.15rem;
+  border-radius: 50%;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+.theme-toggle-btn.small:hover {
+  background: #3498db;
+  color: #fff;
+}
+.theme-dark .footer {
+  background: #23272f;
+  border-top: 1px solid #2c3e50;
+}
+.theme-dark .footer-text {
+  color: #aaa;
+}
+
+body, .theme-light {
+  background: #f8f9fa;
+  color: #222;
+}
+
+.theme-dark, .theme-dark body {
+  background: #181c23 !important;
+  color: #e0e6ed !important;
+}
+
+/* Influencer Dashboard Styles */
+.dashboard-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.08);
+  padding: 32px 24px;
+}
+.dashboard-profile {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.dashboard-profile-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3498db;
+}
+.dashboard-profile-details h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+.dashboard-profile-details p {
+  margin: 0;
+  color: #555;
+}
+.dashboard-metrics {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+.dashboard-metric {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 18px 20px;
+  flex: 1;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.04);
+}
+.metric-label {
+  display: block;
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 6px;
+}
+.metric-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #3498db;
+}
+.dashboard-selector {
+  margin-top: 18px;
+  text-align: right;
+}
+.dashboard-selector label {
+  margin-right: 8px;
+  color: #34495e;
+  font-weight: 500;
+}
+.dashboard-selector select {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Dark theme for dashboard */
+.theme-dark .dashboard-container {
+  background: #23272f;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+}
+.theme-dark .dashboard-profile-details h2 {
+  color: #fff;
+}
+.theme-dark .dashboard-profile-details p {
+  color: #bbb;
+}
+.theme-dark .dashboard-metric {
+  background: #2c3e50;
+  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.08);
+}
+.theme-dark .metric-label {
+  color: #aaa;
+}
+.theme-dark .metric-value {
+  color: #6ec1e4;
+}
+.theme-dark .dashboard-selector label {
+  color: #eee;
+}
+.theme-dark .dashboard-selector select {
+  background: #23272f;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+.navbar-search {
+  margin: 0 20px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  width: 220px;
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.12);
+}
+
+.theme-dark .search-input {
+  background: #23272f;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+.theme-dark .search-input:focus {
+  border-color: #6ec1e4;
+  box-shadow: 0 0 0 2px rgba(110, 193, 228, 0.12);
+}
+
+.subscriber-dashboard-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.08);
+  padding: 32px 24px;
+}
+.subscriber-profile {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.subscriber-profile-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3498db;
+}
+.subscriber-profile-details h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+.subscriber-profile-details p {
+  margin: 0;
+  color: #555;
+}
+.subscriber-actions {
+  margin-bottom: 24px;
+  text-align: right;
+}
+.pay-another-btn {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pay-another-btn:hover {
+  background: #219150;
+}
+.subscription-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+.subscription-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.subscription-influencer-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #3498db;
+}
+.subscription-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.influencer-name {
+  font-weight: 600;
+  color: #2c3e50;
+}
+.subscription-amount {
+  color: #555;
+  font-size: 0.98rem;
+}
+.subscription-status {
+  font-size: 0.95rem;
+  color: #888;
+}
+.subscription-lastpaid {
+  font-size: 0.92rem;
+  color: #888;
+}
+.subscription-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cancel-btn, .renew-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.renew-btn {
+  background: #3498db;
+}
+.cancel-btn:hover {
+  background: #c0392b;
+}
+.renew-btn:hover {
+  background: #217dbb;
+}
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.transaction-table th, .transaction-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+.transaction-table th {
+  background: #f4f6fa;
+  color: #2c3e50;
+}
+.transaction-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Dark theme for subscriber dashboard */
+.theme-dark .subscriber-dashboard-container {
+  background: #23272f;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+}
+.theme-dark .subscriber-profile-details h2 {
+  color: #fff;
+}
+.theme-dark .subscriber-profile-details p {
+  color: #bbb;
+}
+.theme-dark .subscription-item {
+  background: #2c3e50;
+}
+.theme-dark .influencer-name {
+  color: #fff;
+}
+.theme-dark .subscription-amount,
+.theme-dark .subscription-status,
+.theme-dark .subscription-lastpaid {
+  color: #aaa;
+}
+.theme-dark .cancel-btn {
+  background: #e74c3c;
+}
+.theme-dark .cancel-btn:hover {
+  background: #c0392b;
+}
+.theme-dark .renew-btn {
+  background: #3498db;
+}
+.theme-dark .renew-btn:hover {
+  background: #217dbb;
+}
+.theme-dark .transaction-table th {
+  background: #23272f;
+  color: #fff;
+}
+.theme-dark .transaction-table td {
+  color: #eee;
+}
+
+.pay-btn {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 5px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 60px;
+}
+.pay-btn:hover {
+  background: #219150;
+}
+
+.admin-dashboard-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.08);
+  padding: 32px 24px;
+}
+.admin-summary {
+  margin-bottom: 24px;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 28px;
+}
+.admin-table th, .admin-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+.admin-table th {
+  background: #f4f6fa;
+  color: #2c3e50;
+}
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+.admin-table button {
+  margin-right: 6px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: none;
+  font-size: 0.97rem;
+  cursor: pointer;
+  background: #3498db;
+  color: #fff;
+  transition: background 0.2s;
+}
+.admin-table button:last-child {
+  margin-right: 0;
+}
+.admin-table button:hover {
+  background: #217dbb;
+}
+.admin-list {
+  list-style: disc inside;
+  margin-bottom: 28px;
+  color: #2c3e50;
+}
+
+/* Dark theme for admin dashboard */
+.theme-dark .admin-dashboard-container {
+  background: #23272f;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+}
+.theme-dark .admin-summary {
+  color: #fff;
+}
+.theme-dark .admin-table th {
+  background: #23272f;
+  color: #fff;
+}
+.theme-dark .admin-table td {
+  color: #eee;
+}
+.theme-dark .admin-list {
+  color: #eee;
+}
+.theme-dark .admin-table button {
+  background: #6ec1e4;
+  color: #23272f;
+}
+.theme-dark .admin-table button:hover {
+  background: #3498db;
+  color: #fff;
+}
