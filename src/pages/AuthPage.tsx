@@ -22,34 +22,34 @@ const AuthPage: React.FC = () => {
   const switchToRegister = () => setIsLogin(false);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="text-center">
+    <div className="auth-page">
+      <div className="auth-container">
+        <div className="auth-header">
           <img
-            className="mx-auto h-12 w-auto"
+            className="auth-logo"
             src="/logo.png"
             alt="USSD AutoPay"
           />
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <h1 className="auth-title">
             {isLogin ? 'Sign in to your account' : 'Create your account'}
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          </h1>
+          <p className="auth-subtitle">
             {isLogin ? (
               <>
-                Or{' '}
+                <span className="auth-switch-text">Or{' '}</span>
                 <button
                   onClick={switchToRegister}
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="auth-switch-button"
                 >
                   create a new account
                 </button>
               </>
             ) : (
               <>
-                Or{' '}
+                <span className="auth-switch-text">Or{' '}</span>
                 <button
                   onClick={switchToLogin}
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="auth-switch-button"
                 >
                   sign in to your existing account
                 </button>
@@ -57,27 +57,27 @@ const AuthPage: React.FC = () => {
             )}
           </p>
         </div>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        {isLogin ? (
-          <LoginForm onSwitchToRegister={switchToRegister} />
-        ) : (
-          <RegisterForm onSwitchToLogin={switchToLogin} />
-        )}
-      </div>
+        <div className="auth-form">
+          {isLogin ? (
+            <LoginForm onSwitchToRegister={switchToRegister} />
+          ) : (
+            <RegisterForm onSwitchToLogin={switchToLogin} />
+          )}
+        </div>
 
-      <div className="mt-8 text-center">
-        <p className="text-xs text-gray-500">
-          By continuing, you agree to our{' '}
-          <a href="/terms" className="text-blue-600 hover:text-blue-500">
-            Terms of Service
-          </a>{' '}
-          and{' '}
-          <a href="/privacy" className="text-blue-600 hover:text-blue-500">
-            Privacy Policy
-          </a>
-        </p>
+        <div className="auth-terms">
+          <p>
+            By continuing, you agree to our{' '}
+            <a href="/terms" className="auth-terms-link">
+              Terms of Service
+            </a>{' '}
+            and{' '}
+            <a href="/privacy" className="auth-terms-link">
+              Privacy Policy
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
