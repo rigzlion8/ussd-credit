@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { InfluencerList } from './components/InfluencerList';
 import { InfluencerDashboard } from './pages/InfluencerDashboard';
 import { SubscriberDashboard } from './pages/SubscriberDashboard';
@@ -14,11 +14,48 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 
 const AppContent = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
   const isAdmin = user?.user_type === 'admin';
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        mobileToggleRef.current &&
+        !mobileToggleRef.current.contains(event.target as Node)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    // Close mobile menu when window is resized to desktop
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Close mobile menu when route changes
+  const handleNavClick = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -34,19 +71,62 @@ const AppContent = () => {
             <span className="platform-name">USSD AutoPay</span>
           </div>
           
-          <div className="navbar-links navbar-links-center">
-            <Link to="/" className="nav-link">Home</Link>
-            <a href="#" className="nav-link">Features</a>
-            <a href="#" className="nav-link">Pricing</a>
-            <a href="#" className="nav-link">Contact</a>
-            <Link to="/subscriber" className="nav-link">Subscriber Dashboard</Link>
+          {/* Mobile menu toggle */}
+          <button 
+            ref={mobileToggleRef}
+            className="mobile-menu-toggle"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            <span className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}></span>
+          </button>
+          
+          {/* Mobile menu backdrop */}
+          <div 
+            className={`mobile-menu-backdrop ${isMobileMenuOpen ? 'active' : ''}`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          <div 
+            ref={mobileMenuRef}
+            className={`navbar-links navbar-links-center ${isMobileMenuOpen ? 'mobile-open' : ''}`}
+          >
+            <Link to="/" className="nav-link" onClick={handleNavClick}>Home</Link>
+            <a href="#" className="nav-link" onClick={handleNavClick}>Features</a>
+            <a href="#" className="nav-link" onClick={handleNavClick}>Pricing</a>
+            <a href="#" className="nav-link" onClick={handleNavClick}>Contact</a>
+            <Link to="/subscriber" className="nav-link" onClick={handleNavClick}>Subscriber Dashboard</Link>
             {isAdmin && (
               <>
-                <Link to="/dashboard" className="nav-link">Influencer Dashboard</Link>
-                <Link to="/admin" className="nav-link">Admin Dashboard</Link>
-                <Link to="/admin/users" className="nav-link">User Management</Link>
+                <Link to="/dashboard" className="nav-link" onClick={handleNavClick}>Influencer Dashboard</Link>
+                <Link to="/admin" className="nav-link" onClick={handleNavClick}>Admin Dashboard</Link>
+                <Link to="/admin/users" className="nav-link" onClick={handleNavClick}>User Management</Link>
               </>
             )}
+            {/* Mobile-only auth links */}
+            <div className="mobile-auth-links">
+              {isAuthenticated ? (
+                <>
+                  <Link to="/profile" className="nav-link" onClick={handleNavClick}>
+                    {user?.first_name || user?.email || 'Profile'}
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      handleNavClick();
+                    }}
+                    className="nav-link text-red-600 hover:text-red-500"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/auth" className="nav-link" onClick={handleNavClick}>Login</Link>
+                  <Link to="/auth" className="nav-link" onClick={handleNavClick}>Sign Up</Link>
+                </>
+              )}
+            </div>
           </div>
           
           <div className="navbar-auth-search">
