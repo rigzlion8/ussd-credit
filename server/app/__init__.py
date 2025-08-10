@@ -32,15 +32,24 @@ def create_app() -> Flask:
     cors.init_app(app, resources={r"/*": {"origins": cors_origins}})
 
     # Try to register blueprints if they exist
+    print("DEBUG: Starting blueprint registration...")
+    
     try:
+        print("DEBUG: Attempting to import api_bp from .routes")
         from .routes import api_bp
         print("DEBUG: Successfully imported api_bp")
+        print(f"DEBUG: api_bp type: {type(api_bp)}")
+        print(f"DEBUG: api_bp name: {api_bp.name}")
         app.register_blueprint(api_bp, url_prefix="/api")
         print("DEBUG: Successfully registered api_bp")
     except ImportError as e:
         print(f"DEBUG: api_bp not found, skipping registration: {e}")
+        print(f"DEBUG: ImportError details: {type(e).__name__}: {e}")
     except Exception as e:
         print(f"DEBUG: Error registering api_bp: {e}")
+        print(f"DEBUG: Exception details: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
     
     try:
         from .routes.webhooks import webhooks_bp
