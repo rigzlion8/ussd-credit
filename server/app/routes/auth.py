@@ -105,7 +105,7 @@ def register():
             "password_hash": generate_password_hash(password),
             "first_name": first_name,
             "last_name": last_name,
-            "user_type": "user",
+            "user_type": data.get("user_type", "user"),  # Allow custom user type
             "email_verified": False,
             "phone_verified": False,
             "is_active": True,
