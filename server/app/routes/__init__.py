@@ -49,6 +49,13 @@ try:
 except Exception as e:
     print(f"DEBUG: Failed to import admin_influencers: {e}")
 
+try:
+    print("DEBUG: Importing admin_setup module...")
+    from . import admin_setup  # noqa: F401
+    print("DEBUG: Successfully imported admin_setup")
+except Exception as e:
+    print(f"DEBUG: Failed to import admin_setup: {e}")
+
 print("DEBUG: Finished importing route modules")
 
 
