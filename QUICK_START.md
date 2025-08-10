@@ -21,7 +21,8 @@ CORS_ALLOW_ORIGINS=https://your-frontend.vercel.app
 # 1. Go to vercel.com and sign up
 # 2. Click "New Project" → "Import Git Repository"
 # 3. Select your repository
-# 4. Add environment variable:
+# 4. Vercel will auto-detect React (ignore backend files)
+# 5. Add environment variable:
 REACT_APP_API_URL=https://your-railway-backend.railway.app
 ```
 

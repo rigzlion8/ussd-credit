@@ -1,0 +1,54 @@
+# Backend files (handled by Railway)
+server/
+*.py
+*.pyc
+__pycache__/
+requirements.txt
+wsgi.py
+Procfile
+railway.json
+.env
+.env.local
+.env.production
+
+# Database files
+*.db
+*.sqlite
+db.json
+postgresql-*/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+
+# Documentation
+DEPLOYMENT.md
+QUICK_START.md
+deploy.sh
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Instance folder (Flask)
+instance/
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
