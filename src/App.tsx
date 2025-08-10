@@ -8,7 +8,7 @@ import AuthPage from './pages/AuthPage';
 import UserProfilePage from './pages/UserProfilePage';
 import SubscriptionPage from './pages/SubscriptionPage';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
@@ -23,6 +23,13 @@ const AppContent = () => {
   
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
+
+  // Debug component to show current route
+  const RouteDebug = () => {
+    const location = useLocation();
+    console.log('🔍 App: Current route:', location.pathname);
+    return null;
+  };
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -162,6 +169,7 @@ const AppContent = () => {
         </nav>
 
         <main className="main-content">
+          <RouteDebug />
           <Routes>
             <Route path="/" element={<InfluencerList />} />
             <Route path="/auth" element={<AuthPage />} />
@@ -177,11 +185,7 @@ const AppContent = () => {
             />
             <Route 
               path="/subscriber" 
-              element={
-                <ProtectedRoute requiredUserType="subscribed">
-                  <SubscriberDashboard />
-                </ProtectedRoute>
-              } 
+              element={<SubscriberDashboard />}
             />
             <Route 
               path="/admin" 
@@ -199,7 +203,8 @@ const AppContent = () => {
                 </ProtectedRoute>
               } 
             />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Temporarily comment out catch-all route to debug routing */}
+            {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
           </Routes>
         </main>
 
