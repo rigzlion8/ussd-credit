@@ -125,11 +125,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
           console.log('🔐 AuthContext: Validating token with API...');
           const response = await authAPI.getProfile();
-          console.log('🔐 AuthContext: Token validation successful, user:', response.data);
-          console.log('🔐 AuthContext: User type from API:', response.data?.user_type, 'Is admin?', response.data?.user_type === 'admin');
+          console.log('🔐 AuthContext: Token validation successful, response:', response.data);
+          
+          // Extract user data from response (backend wraps it in 'user' field)
+          const userData = response.data.user || response.data;
+          console.log('🔐 AuthContext: Extracted user data:', userData);
+          console.log('🔐 AuthContext: User type from API:', userData?.user_type, 'Is admin?', userData?.user_type === 'admin');
+          
           dispatch({
             type: 'AUTH_SUCCESS',
-            payload: { user: response.data, token }
+            payload: { user: userData, token }
           });
         } catch (error) {
           console.error('🔐 AuthContext: Token validation failed:', error);
@@ -161,6 +166,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
       console.log('🔐 AuthContext: Token and user stored in localStorage');
+      console.log('🔐 AuthContext: Stored user data:', JSON.stringify(user));
+      console.log('🔐 AuthContext: Stored token:', token);
       
       dispatch({
         type: 'AUTH_SUCCESS',
