@@ -56,6 +56,13 @@ try:
 except Exception as e:
     print(f"DEBUG: Failed to import admin_setup: {e}")
 
+try:
+    print("DEBUG: Importing auth_simple module...")
+    from . import auth_simple  # noqa: F401
+    print("DEBUG: Successfully imported auth_simple")
+except Exception as e:
+    print(f"DEBUG: Failed to import auth_simple: {e}")
+
 print("DEBUG: Finished importing route modules")
 
 
