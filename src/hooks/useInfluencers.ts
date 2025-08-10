@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { api } from '../lib/api';
 
 interface Influencer {
   id: number;
@@ -18,7 +18,7 @@ export const useInfluencers = () => {
     let isMounted = true;
     const fetchInfluencers = async () => {
       try {
-        const response = await axios.get(`${'https://ussd-autopay.vercel.app' || 'http://localhost:8000'}/api/influencers`);
+        const response = await api.get('/api/influencers');
         const items = (response.data || []).map((x: any) => ({
           ...x,
           imageUrl: x.imageUrl ?? x.image_url ?? '',
