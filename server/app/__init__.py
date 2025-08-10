@@ -74,6 +74,7 @@ def create_app() -> Flask:
             'routes': routes
         })
     
+    # Force Railway redeploy - MongoDB import fixes applied
     return app
 
 
