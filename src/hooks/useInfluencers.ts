@@ -18,7 +18,7 @@ export const useInfluencers = () => {
     let isMounted = true;
     const fetchInfluencers = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'}/api/influencers`);
+        const response = await axios.get(`'https://ussd-autopay.vercel.app' || 'http://localhost:8000'}/api/influencers`);
         const items = (response.data || []).map((x: any) => ({
           ...x,
           imageUrl: x.imageUrl ?? x.image_url ?? '',
