@@ -8,11 +8,11 @@ print(f"DEBUG: api_bp created: {api_bp}")
 print("DEBUG: Starting to import route modules...")
 
 try:
-    print("DEBUG: Importing influencers module...")
-    from . import influencers  # noqa: E402, F401
-    print("DEBUG: Successfully imported influencers")
+    print("DEBUG: Importing influencers_simple module...")
+    from . import influencers_simple  # noqa: E402, F401
+    print("DEBUG: Successfully imported influencers_simple")
 except Exception as e:
-    print(f"DEBUG: Failed to import influencers: {e}")
+    print(f"DEBUG: Failed to import influencers_simple: {e}")
 
 try:
     print("DEBUG: Importing subscribers module...")
