@@ -38,7 +38,7 @@ type AuthAction =
 // Initial state
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem('token'),
+  token: localStorage.getItem('authToken'),
   isAuthenticated: false,
   isLoading: true,
   error: null,
@@ -117,34 +117,45 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('authToken');
+      console.log('🔐 AuthContext: Checking authentication, token found:', !!token);
+      
       if (token) {
         try {
+          console.log('🔐 AuthContext: Validating token with API...');
           const response = await authAPI.getProfile();
+          console.log('🔐 AuthContext: Token validation successful, user:', response.data);
           dispatch({
             type: 'AUTH_SUCCESS',
             payload: { user: response.data, token }
           });
         } catch (error) {
-          console.error('Token validation failed:', error);
+          console.error('🔐 AuthContext: Token validation failed:', error);
           localStorage.removeItem('authToken');
           localStorage.removeItem('user');
+          dispatch({ type: 'AUTH_FAILURE', payload: 'Token validation failed' });
         }
+      } else {
+        // No token found, user is not authenticated
+        console.log('🔐 AuthContext: No token found, user not authenticated');
+        dispatch({ type: 'AUTH_FAILURE', payload: '' });
       }
-      dispatch({ type: 'AUTH_FAILURE', payload: '' });
     };
 
     checkAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
+    console.log('🔐 AuthContext: Login attempt for:', email);
     dispatch({ type: 'AUTH_START' });
     try {
       const response = await authAPI.login({ email, password });
       const { user, token } = response.data;
+      console.log('🔐 AuthContext: Login successful, user:', user, 'token length:', token?.length);
       
       // Store token and user data
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
+      console.log('🔐 AuthContext: Token and user stored in localStorage');
       
       dispatch({
         type: 'AUTH_SUCCESS',
@@ -152,6 +163,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Login failed';
+      console.error('🔐 AuthContext: Login failed:', errorMessage, error);
       dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
       throw new Error(errorMessage);
     }
