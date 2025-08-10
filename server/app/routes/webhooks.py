@@ -1,5 +1,9 @@
 from flask import Blueprint, jsonify, request, Response
-from ..extensions import mongo_db
+# Try to import mongo_db, but don't fail if it's not available
+try:
+    from ..extensions import mongo_db
+except ImportError:
+    mongo_db = None
 
 webhooks_bp = Blueprint("webhooks", __name__)
 

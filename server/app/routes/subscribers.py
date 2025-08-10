@@ -1,6 +1,12 @@
 from flask import jsonify, request
 
-from ..extensions import db, mongo_db
+from ..extensions import db
+
+# Try to import mongo_db, but don't fail if it's not available
+try:
+    from ..extensions import mongo_db
+except ImportError:
+    mongo_db = None
 from ..models import Subscription
 from ..schemas import SubscriptionSchema
 from . import api_bp

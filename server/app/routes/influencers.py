@@ -1,10 +1,16 @@
 from flask import jsonify, request
 
 from flask import current_app
-from ..extensions import db, mongo_db
+from ..extensions import db
 from ..models import Influencer
 from ..schemas import InfluencerSchema
 from . import api_bp
+
+# Try to import mongo_db, but don't fail if it's not available
+try:
+    from ..extensions import mongo_db
+except ImportError:
+    mongo_db = None
 
 
 @api_bp.get("/influencers")

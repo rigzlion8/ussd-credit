@@ -5,7 +5,11 @@ import jwt
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
-from ..extensions import mongo_db
+# Try to import mongo_db, but don't fail if it's not available
+try:
+    from ..extensions import mongo_db
+except ImportError:
+    mongo_db = None
 from ..models.user import User, UserType
 from . import api_bp
 

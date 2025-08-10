@@ -1,7 +1,11 @@
 from flask import jsonify, request
 from flask_cors import cross_origin
 from datetime import datetime
-from ..extensions import mongo_db
+# Try to import mongo_db, but don't fail if it's not available
+try:
+    from ..extensions import mongo_db
+except ImportError:
+    mongo_db = None
 from .auth import admin_required
 from . import api_bp
 
