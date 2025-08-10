@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install Python dependencies directly (no requirements file needed)
+RUN pip install --no-cache-dir \
+    Flask==2.3.3 \
+    Flask-SQLAlchemy==3.0.5 \
+    Flask-Migrate==4.0.5 \
+    Flask-CORS==4.0.0 \
+    Flask-JWT-Extended==4.5.3 \
+    PyJWT==2.8.0 \
+    python-dotenv==1.0.0 \
+    pymongo==4.8.0 \
+    Werkzeug==2.3.7 \
+    requests==2.31.0 \
+    gunicorn==21.2.0
+
+# Copy application code
+COPY . .
+
+# Expose port
+EXPOSE 8000
+
+# Run the application
+CMD gunicorn --bind 0.0.0.0:$PORT wsgi:app
