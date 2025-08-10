@@ -117,13 +117,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('authToken');
+      const storedUser = localStorage.getItem('user');
       console.log('🔐 AuthContext: Checking authentication, token found:', !!token);
+      console.log('🔐 AuthContext: Stored user data:', storedUser);
       
       if (token) {
         try {
           console.log('🔐 AuthContext: Validating token with API...');
           const response = await authAPI.getProfile();
           console.log('🔐 AuthContext: Token validation successful, user:', response.data);
+          console.log('🔐 AuthContext: User type from API:', response.data?.user_type, 'Is admin?', response.data?.user_type === 'admin');
           dispatch({
             type: 'AUTH_SUCCESS',
             payload: { user: response.data, token }
@@ -149,8 +152,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     dispatch({ type: 'AUTH_START' });
     try {
       const response = await authAPI.login({ email, password });
+      console.log('🔐 AuthContext: Raw login response:', response);
       const { user, token } = response.data;
       console.log('🔐 AuthContext: Login successful, user:', user, 'token length:', token?.length);
+      console.log('🔐 AuthContext: User type:', user?.user_type, 'Is admin?', user?.user_type === 'admin');
       
       // Store token and user data
       localStorage.setItem('authToken', token);

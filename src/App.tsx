@@ -17,6 +17,10 @@ const AppContent = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
   const isAdmin = user?.user_type === 'admin';
+  
+  // Debug logging
+  console.log('🔍 App: Authentication state:', { isAuthenticated, user, isAdmin });
+  
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
