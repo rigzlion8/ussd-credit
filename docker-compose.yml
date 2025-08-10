@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./server
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=postgresql://postgres:password@db:5432/ussd_credit
+      - JWT_SECRET_KEY=your-super-secret-key-change-this
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - ./server:/app
+    networks:
+      - ussd-network
+
+  frontend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    networks:
+      - ussd-network
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=ussd_credit
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ussd-network
+
+volumes:
+  postgres_data:
+
+networks:
+  ussd-network:
+    driver: bridge
