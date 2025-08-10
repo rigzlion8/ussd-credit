@@ -32,3 +32,22 @@ deploy.sh
 # OS
 .DS_Store
 Thumbs.db
+
+# Additional files that might confuse Railway
+yarn.lock
+pnpm-lock.yaml
+next.config.js
+vite.config.js
+tailwind.config.js
+postcss.config.js
+.eslintrc*
+.prettierrc*
+
+# Force Python-only deployment
+*.js
+*.jsx
+*.ts
+*.tsx
+*.css
+*.scss
+*.html
