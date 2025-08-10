@@ -173,6 +173,10 @@
   gap: 12px;
 }
 
+.navbar-auth:empty {
+  display: none;
+}
+
 .nav-link {
   text-decoration: none;
   color: #34495e;

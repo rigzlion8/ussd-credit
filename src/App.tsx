@@ -152,12 +152,7 @@ const AppContent = () => {
                     Logout
                   </button>
                 </div>
-              ) : (
-                <div className="flex space-x-3">
-                  <Link to="/auth" className="auth-link login-link">Login</Link>
-                  <Link to="/auth" className="auth-link signup-link">Sign Up</Link>
-                </div>
-              )}
+              ) : null}
             </div>
           </div>
         </nav>
