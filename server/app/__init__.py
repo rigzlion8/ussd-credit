@@ -34,15 +34,23 @@ def create_app() -> Flask:
     # Try to register blueprints if they exist
     try:
         from .routes import api_bp
+        print("DEBUG: Successfully imported api_bp")
         app.register_blueprint(api_bp, url_prefix="/api")
-    except ImportError:
-        print("DEBUG: api_bp not found, skipping registration")
+        print("DEBUG: Successfully registered api_bp")
+    except ImportError as e:
+        print(f"DEBUG: api_bp not found, skipping registration: {e}")
+    except Exception as e:
+        print(f"DEBUG: Error registering api_bp: {e}")
     
     try:
         from .routes.webhooks import webhooks_bp
+        print("DEBUG: Successfully imported webhooks_bp")
         app.register_blueprint(webhooks_bp, url_prefix="/webhooks")
-    except ImportError:
-        print("DEBUG: webhooks_bp not found, skipping registration")
+        print("DEBUG: Successfully registered webhooks_bp")
+    except ImportError as e:
+        print(f"DEBUG: webhooks_bp not found, skipping registration: {e}")
+    except Exception as e:
+        print(f"DEBUG: Error registering webhooks_bp: {e}")
 
     @app.route("/")
     def root():
@@ -51,6 +59,20 @@ def create_app() -> Flask:
     @app.route("/health")
     def health_check():
         return jsonify({'status': 'healthy', 'message': 'USSD Credit API is running'})
+    
+    @app.route("/debug/routes")
+    def debug_routes():
+        routes = []
+        for rule in app.url_map.iter_rules():
+            routes.append({
+                'endpoint': rule.endpoint,
+                'methods': list(rule.methods),
+                'rule': str(rule)
+            })
+        return jsonify({
+            'total_routes': len(routes),
+            'routes': routes
+        })
     
     return app
 
