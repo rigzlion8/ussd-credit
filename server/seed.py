@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from server.app import create_app
-from server.app.extensions import db
+from server.app.extensions import db, mongo_client, mongo_db
 from server.app.models import User, Influencer, Subscription
 
 
@@ -19,6 +19,25 @@ def main():
 
         with db_json_path.open() as f:
             data = json.load(f)
+
+        # If Mongo is configured and reachable, seed Mongo collections for POC
+        try:
+            if mongo_db is not None:
+                mdb = mongo_db
+                mdb.get_collection("users").delete_many({})
+                mdb.get_collection("influencers").delete_many({})
+                mdb.get_collection("subscribers").delete_many({})
+                mdb.get_collection("payments").delete_many({})
+                mdb.get_collection("withdrawals").delete_many({})
+                mdb.get_collection("otp_codes").delete_many({})
+                if data.get("users"):
+                    mdb.get_collection("users").insert_many(data["users"])  # simple insert
+                if data.get("influencers"):
+                    mdb.get_collection("influencers").insert_many(data["influencers"])  # simple insert
+                if data.get("subscribers"):
+                    mdb.get_collection("subscribers").insert_many(data["subscribers"])  # simple insert
+        except Exception:
+            pass
 
         # Users (keyed by phone)
         for u in data.get("users", []):

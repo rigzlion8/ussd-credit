@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request, Response
+from ..extensions import mongo_db
 
 webhooks_bp = Blueprint("webhooks", __name__)
 
@@ -28,6 +29,8 @@ def mpesa_callback():
     # Accept and acknowledge M-Pesa callbacks
     payload = request.get_json(silent=True) or {}
     # TODO: validate signature/IP and persist transaction outcome
+    if mongo_db:
+        mongo_db.get_collection("payments").insert_one({"callback": payload})
     return jsonify({"ResultCode": 0, "ResultDesc": "Accepted"})
 
 

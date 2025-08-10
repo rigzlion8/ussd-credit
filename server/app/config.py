@@ -3,6 +3,8 @@ import os
 
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///app.db")
+    # Default to local Mongo; override via env in server/.env with your cloud URI
+    MONGO_URI = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017/ussd_credit")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-jwt-secret")

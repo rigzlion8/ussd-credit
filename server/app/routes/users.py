@@ -1,6 +1,6 @@
 from flask import jsonify, request
 
-from ..extensions import db
+from ..extensions import db, mongo_db
 from ..models import User
 from ..schemas import UserSchema
 from . import api_bp
@@ -10,6 +10,15 @@ from . import api_bp
 def list_users():
     phone = request.args.get("phone")
     pin = request.args.get("pin")
+    if mongo_db:
+        coll = mongo_db.get_collection("users")
+        filter_q = {}
+        if phone:
+            filter_q["phone"] = str(phone)
+        if pin:
+            filter_q["pin"] = str(pin)
+        docs = list(coll.find(filter_q, {"_id": 0}))
+        return jsonify(docs)
     query = User.query
     if phone:
         query = query.filter(User.phone == str(phone))
@@ -23,6 +32,16 @@ def list_users():
 @api_bp.post("/users")
 def create_user():
     payload = request.get_json(force=True) or {}
+    if mongo_db:
+        coll = mongo_db.get_collection("users")
+        doc = {
+            "phone": payload.get("phone"),
+            "role": payload.get("role", "subscriber"),
+            "pin": payload.get("pin"),
+            "balance": payload.get("balance"),
+        }
+        coll.insert_one(doc)
+        return jsonify(doc), 201
     user = User(
         phone=payload.get("phone"),
         role=payload.get("role", "subscriber"),
