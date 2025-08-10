@@ -15,11 +15,11 @@ except Exception as e:
     print(f"DEBUG: Failed to import influencers_simple: {e}")
 
 try:
-    print("DEBUG: Importing subscribers module...")
-    from . import subscribers  # noqa: E402, F401
-    print("DEBUG: Successfully imported subscribers")
+    print("DEBUG: Importing subscribers_simple module...")
+    from . import subscribers_simple  # noqa: E402, F401
+    print("DEBUG: Successfully imported subscribers_simple")
 except Exception as e:
-    print(f"DEBUG: Failed to import subscribers: {e}")
+    print(f"DEBUG: Failed to import subscribers_simple: {e}")
 
 # Temporarily comment out potentially conflicting modules
 # try:
