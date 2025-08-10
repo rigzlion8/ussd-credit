@@ -8,10 +8,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "functions": {
-    "server/**/*.py": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 }
