@@ -17,7 +17,7 @@ except ImportError:
     ]
 
 @api_bp.get("/influencers")
-def list_influencers():
+def list_simple_influencers():
     """Public endpoint to list all influencers"""
     return jsonify(INFLUENCERS_DB)
 

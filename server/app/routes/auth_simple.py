@@ -124,7 +124,7 @@ def simple_login():
 
 @api_bp.get("/auth/simple/users")
 @cross_origin()
-def list_users():
+def list_simple_users():
     """List all users (for debugging)"""
     try:
         return jsonify({
