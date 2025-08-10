@@ -23,7 +23,8 @@ CORS_ALLOW_ORIGINS=https://your-frontend.vercel.app
 # 3. Select your repository
 # 4. Vercel will auto-detect React (ignore backend files)
 # 5. Add environment variable:
-REACT_APP_API_URL=https://your-railway-backend.railway.app
+REACT_APP_API_BASE_URL=https://ussd-credit-production.up.railway.app
+# 6. Your app will be available at: https://ussd-autopay.vercel.app
 ```
 
 ### 3. Update CORS

@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // API configuration for the real Flask backend
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+const baseURL = process.env.REACT_APP_API_BASE_URL || 
+  (window.location.hostname === 'ussd-autopay.vercel.app' 
+    ? 'https://ussd-credit-production.up.railway.app' 
+    : 'http://localhost:8000');
 
 export const api = axios.create({
   baseURL,
