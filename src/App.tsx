@@ -116,12 +116,7 @@ const AppContent = () => {
                     Logout
                   </button>
                 </>
-              ) : (
-                <>
-                  <Link to="/auth" className="nav-link" onClick={handleNavClick}>Login</Link>
-                  <Link to="/auth" className="nav-link" onClick={handleNavClick}>Sign Up</Link>
-                </>
-              )}
+              ) : null}
             </div>
           </div>
           

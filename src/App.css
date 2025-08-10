@@ -363,6 +363,10 @@
     border-top: 1px solid #eee;
   }
   
+  .mobile-auth-links:empty {
+    display: none;
+  }
+  
   .mobile-auth-links .nav-link {
     border-bottom: none;
     padding: 0.5rem 1rem;
