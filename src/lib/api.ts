@@ -25,16 +25,59 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle token expiration
+// Add response interceptor for better error handling
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Validate response data structure
+    if (response.data && typeof response.data === 'object') {
+      // Ensure data is always an array for list endpoints
+      if (Array.isArray(response.data)) {
+        return response;
+      }
+      // If data is an object but not an array, wrap it
+      if (response.config.url?.includes('/api/')) {
+        response.data = [response.data];
+      }
+    }
+    return response;
+  },
   async (error) => {
+    console.error('API Error:', error);
+    
+    // Handle CORS errors specifically
+    if (error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+      console.error('CORS or Network Error - Check backend CORS configuration');
+      error.message = 'Network Error: Unable to connect to server. Please check your connection or contact support.';
+    }
+    
+    // Handle token expiration
     if (error.response?.status === 401) {
       // Token expired or invalid, redirect to login
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       window.location.href = '/auth';
     }
+    
+    // Handle specific HTTP status codes
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          error.message = 'Unauthorized: Please log in again.';
+          break;
+        case 403:
+          error.message = 'Forbidden: You do not have permission to access this resource.';
+          break;
+        case 404:
+          error.message = 'Resource not found.';
+          break;
+        case 500:
+          error.message = 'Server error: Please try again later.';
+          break;
+        default:
+          error.message = `Request failed with status ${error.response.status}`;
+      }
+    }
+    
     return Promise.reject(error);
   }
 );

@@ -60,32 +60,38 @@ export const AdminDashboard = () => {
 
         // Fetch influencers
         const influencersResponse = await influencerAPI.getAll();
-        const influencersData = influencersResponse.data.map((inf: any) => ({
-          id: inf.id,
-          name: inf.name,
-          status: inf.is_active ? 'active' : 'suspended',
-          receivedToday: inf.received_today || 0,
-          receivedTotal: inf.received || 0
-        }));
+        const influencersData = Array.isArray(influencersResponse?.data) 
+          ? influencersResponse.data.map((inf: any) => ({
+              id: inf.id,
+              name: inf.name,
+              status: inf.is_active ? 'active' : 'suspended',
+              receivedToday: inf.received_today || 0,
+              receivedTotal: inf.received || 0
+            }))
+          : [];
         setInfluencers(influencersData);
 
         // Fetch subscribers
         const subscribersResponse = await subscriptionAPI.getAll();
-        const subscribersData = subscribersResponse.data.map((sub: any) => ({
-          id: sub.id,
-          name: sub.fan_phone || `Subscriber ${sub.id}`,
-          status: sub.is_active ? 'active' : 'inactive',
-          subscriptions: 1 // This would need to be calculated based on actual data
-        }));
+        const subscribersData = Array.isArray(subscribersResponse?.data)
+          ? subscribersResponse.data.map((sub: any) => ({
+              id: sub.id,
+              name: sub.fan_phone || `Subscriber ${sub.id}`,
+              status: sub.is_active ? 'active' : 'inactive',
+              subscriptions: 1 // This would need to be calculated based on actual data
+            }))
+          : [];
         setSubscribers(subscribersData);
 
         // Fetch users
         const usersResponse = await adminAPI.getUsers();
-        const usersData = usersResponse.data.map((user: any) => ({
-          id: user.id,
-          phone: user.phone || user.email,
-          status: user.is_active ? 'active' : 'suspended'
-        }));
+        const usersData = Array.isArray(usersResponse?.data)
+          ? usersResponse.data.map((user: any) => ({
+              id: user.id,
+              phone: user.phone || user.email,
+              status: user.is_active ? 'active' : 'suspended'
+            }))
+          : [];
         setUsers(usersData);
 
       } catch (error) {
