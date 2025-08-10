@@ -1,70 +1,151 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { subscriptionAPI, userAPI } from '../lib/api';
 
-// Mock data for demonstration
-const mockSubscriber = {
-  id: 1,
-  name: 'Jane Doe',
-  phone: '254700000001',
-  imageUrl: '/images/jane_doe.jpg',
-  totalPaid: 12340,
-  subscriptions: [
-    {
-      id: 1,
-      influencerName: 'John Wick',
-      influencerImage: '/images/john_wick.jpg',
-      amount: 1000,
-      frequency: 'monthly',
-      isActive: true,
-      lastPaid: '2024-06-01T10:30:00',
-    },
-    {
-      id: 2,
-      influencerName: 'Martha Musembi',
-      influencerImage: '/images/martha_musembi.jpg',
-      amount: 520,
-      frequency: 'weekly',
-      isActive: false,
-      lastPaid: '2024-05-20T09:00:00',
-    },
-  ],
-  transactions: [
-    { id: 1, amount: 1000, date: '2024-06-01T10:30:00', influencer: 'John Wick' },
-    { id: 2, amount: 520, date: '2024-05-20T09:00:00', influencer: 'Martha Musembi' },
-  ],
-};
+interface Subscription {
+  id: number;
+  influencerName: string;
+  influencerImage: string;
+  amount: number;
+  frequency: string;
+  isActive: boolean;
+  lastPaid: string;
+}
+
+interface Transaction {
+  id: number;
+  amount: number;
+  date: string;
+  influencer: string;
+}
+
+interface SubscriberData {
+  id: number;
+  name: string;
+  phone: string;
+  imageUrl: string;
+  totalPaid: number;
+  subscriptions: Subscription[];
+  transactions: Transaction[];
+}
 
 export const SubscriberDashboard = () => {
-  const [subscriptions, setSubscriptions] = useState(mockSubscriber.subscriptions);
+  const { user } = useAuth();
+  const [subscriberData, setSubscriberData] = useState<SubscriberData | null>(null);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleCancel = (id: number) => {
-    setSubscriptions((subs) =>
-      subs.map((sub) => (sub.id === id ? { ...sub, isActive: false } : sub))
-    );
+  // Fetch subscriber data from real API
+  useEffect(() => {
+    const fetchSubscriberData = async () => {
+      if (!user) return;
+
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        // Fetch user's subscriptions
+        const subscriptionsResponse = await subscriptionAPI.getAll();
+        const userSubscriptions = subscriptionsResponse.data.filter((sub: any) => 
+          sub.fan_phone === user.phone || sub.user_id === user.id
+        );
+
+        // Transform subscription data
+        const transformedSubscriptions: Subscription[] = userSubscriptions.map((sub: any) => ({
+          id: sub.id,
+          influencerName: sub.influencer_name || `Influencer ${sub.influencer_id}`,
+          influencerImage: sub.influencer_image || `https://ui-avatars.com/api/?name=${encodeURIComponent(sub.influencer_name || 'Influencer')}`,
+          amount: sub.amount,
+          frequency: sub.frequency,
+          isActive: sub.is_active,
+          lastPaid: sub.last_paid || sub.created_at
+        }));
+
+        setSubscriptions(transformedSubscriptions);
+
+        // Create subscriber data object
+        const data: SubscriberData = {
+          id: user.id,
+          name: user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.email || 'User',
+          phone: user.phone || 'N/A',
+          imageUrl: user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name || user.email || 'User')}`,
+          totalPaid: transformedSubscriptions.reduce((sum, sub) => sum + sub.amount, 0),
+          subscriptions: transformedSubscriptions,
+          transactions: transformedSubscriptions.map(sub => ({
+            id: sub.id,
+            amount: sub.amount,
+            date: sub.lastPaid,
+            influencer: sub.influencerName
+          }))
+        };
+
+        setSubscriberData(data);
+
+      } catch (error) {
+        console.error('Failed to fetch subscriber data:', error);
+        setError('Failed to load subscriber data. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSubscriberData();
+  }, [user]);
+
+  const handleCancel = async (id: number) => {
+    try {
+      await subscriptionAPI.update(id, { is_active: false });
+      setSubscriptions((subs) =>
+        subs.map((sub) => (sub.id === id ? { ...sub, isActive: false } : sub))
+      );
+    } catch (error) {
+      console.error('Failed to cancel subscription:', error);
+      alert('Failed to cancel subscription. Please try again.');
+    }
   };
 
-  const handleRenew = (id: number) => {
-    setSubscriptions((subs) =>
-      subs.map((sub) => (sub.id === id ? { ...sub, isActive: true } : sub))
-    );
+  const handleRenew = async (id: number) => {
+    try {
+      await subscriptionAPI.update(id, { is_active: true });
+      setSubscriptions((subs) =>
+        subs.map((sub) => (sub.id === id ? { ...sub, isActive: true } : sub))
+      );
+    } catch (error) {
+      console.error('Failed to renew subscription:', error);
+      alert('Failed to renew subscription. Please try again.');
+    }
   };
 
   const handlePayForAnother = () => {
     alert('Feature coming soon: Pay for another subscriber!');
   };
 
+  if (isLoading) {
+    return <div className="subscriber-dashboard-container">Loading subscriber data...</div>;
+  }
+
+  if (error) {
+    return <div className="subscriber-dashboard-container">Error: {error}</div>;
+  }
+
+  if (!subscriberData) {
+    return <div className="subscriber-dashboard-container">No subscriber data available.</div>;
+  }
+
   return (
     <div className="subscriber-dashboard-container">
       <h1>Subscriber Dashboard</h1>
       <div className="subscriber-profile">
         <img
-          src={mockSubscriber.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(mockSubscriber.name)}`}
-          alt={mockSubscriber.name}
+          src={subscriberData.imageUrl}
+          alt={subscriberData.name}
           className="subscriber-profile-img"
         />
         <div className="subscriber-profile-details">
-          <h2>{mockSubscriber.name}</h2>
-          <p>Phone: {mockSubscriber.phone}</p>
-          <p>Total Paid Out: <b>KSh {mockSubscriber.totalPaid}</b></p>
+          <h2>{subscriberData.name}</h2>
+          <p>Phone: {subscriberData.phone}</p>
+          <p>Total Paid Out: <b>KSh {subscriberData.totalPaid}</b></p>
           <p>Influencers Subscribed: <b>{subscriptions.length}</b></p>
         </div>
       </div>
@@ -98,15 +179,15 @@ export const SubscriberDashboard = () => {
           <tr>
             <th>Date & Time</th>
             <th>Influencer</th>
-            <th>Amount (KSh)</th>
+            <th>Amount</th>
           </tr>
         </thead>
         <tbody>
-          {mockSubscriber.transactions.map((tx) => (
+          {subscriberData.transactions.map((tx) => (
             <tr key={tx.id}>
               <td>{new Date(tx.date).toLocaleString()}</td>
               <td>{tx.influencer}</td>
-              <td>{tx.amount}</td>
+              <td>KSh {tx.amount}</td>
             </tr>
           ))}
         </tbody>

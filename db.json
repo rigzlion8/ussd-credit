@@ -1,114 +1,182 @@
 {
-  "influencers": [
-    {
-      "id": 1,
-      "phone": "254712345678",
-      "name": "Jane Doe",
-      "imageUrl": "/images/jane_doe.jpg",
-      "ussd_shortcode": "1234",
-      "received": 500
-    },
-    {
-      "id": 2,
-      "phone": "254722345678",
-      "name": "Wambui Doe",
-      "ussd_shortcode": "1234",
-      "received": 450000
-    },
-    {
-      "id": 3,
-      "phone": "254722345678",
-      "name": "John Wick",
-      "ussd_shortcode": "0000",
-      "imageUrl": "/images/john_wick.jpg",
-      "received": 5235000
-    },
-    {
-      "id": 4,
-      "phone": "254712345000",
-      "name": "Martha Musembi",
-      "ussd_shortcode": "1234",
-      "received": 50050
-    },
-    {
-      "id": 5,
-      "phone": "254722345001",
-      "name": "Wambui Doe",
-      "ussd_shortcode": "1234",
-      "received": 450000
-    },
-    {
-      "id": 6,
-      "phone": "254722345002",
-      "name": "John Wick",
-      "ussd_shortcode": "0000",
-      "received": 3750000
-    }
-  ],
-  "subscribers": [
-    {
-      "id": 1,
-      "fan_phone": "254700000001",
-      "influencer_id": 1,
-      "amount": 10,
-      "frequency": "weekly",
-      "is_active": true
-    },
-    {
-      "id": 2,
-      "fan_phone": "254700000002",
-      "influencer_id": 2,
-      "amount": 520,
-      "frequency": "weekly",
-      "is_active": true
-    },
-    {
-      "id": 3,
-      "fan_phone": "254700000003",
-      "influencer_id": 3,
-      "amount": 1000,
-      "frequency": "monthly",
-      "is_active": true
-    },
-    {
-      "id": 4,
-      "fan_phone": "254700000004",
-      "influencer_id": 4,
-      "amount": 1050,
-      "frequency": "weekly",
-      "is_active": true
-    },
-    {
-      "id": 5,
-      "fan_phone": "254700000005",
-      "influencer_id": 5,
-      "amount": 5200,
-      "frequency": "weekly",
-      "is_active": true
-    },
-    {
-      "id": 6,
-      "fan_phone": "254700000006",
-      "influencer_id": 6,
-      "amount": 10000,
-      "frequency": "monthly",
-      "is_active": true
-    },
-    {
-      "id": "dbad",
-      "fan_phone": "254710000001",
-      "influencer_id": 3,
-      "amount": 10,
-      "frequency": "none",
-      "is_active": true
-    }
-  ],
   "users": [
     {
       "id": 1,
-      "phone": "254710000001",
-      "pin": "4321",
-      "balance": 1000000
+      "email": "admin@ussd.com",
+      "phone": "+254700000001",
+      "username": "admin",
+      "user_type": "admin",
+      "first_name": "Admin",
+      "last_name": "User",
+      "avatar_url": "https://ui-avatars.com/api/?name=Admin+User&background=8B5CF6&color=fff",
+      "email_verified": true,
+      "phone_verified": true,
+      "is_active": true,
+      "last_login": "2024-01-15T10:30:00Z",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": 2,
+      "email": "john@example.com",
+      "phone": "+254700000002",
+      "username": "john_doe",
+      "user_type": "subscribed",
+      "first_name": "John",
+      "last_name": "Doe",
+      "avatar_url": "https://ui-avatars.com/api/?name=John+Doe&background=10B981&color=fff",
+      "email_verified": true,
+      "phone_verified": true,
+      "is_active": true,
+      "last_login": "2024-01-14T15:20:00Z",
+      "created_at": "2024-01-05T00:00:00Z",
+      "updated_at": "2024-01-14T15:20:00Z"
+    },
+    {
+      "id": 3,
+      "email": "jane@example.com",
+      "phone": "+254700000003",
+      "username": "jane_smith",
+      "user_type": "user",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "avatar_url": "https://ui-avatars.com/api/?name=Jane+Smith&background=3B82F6&color=fff",
+      "email_verified": true,
+      "phone_verified": false,
+      "is_active": true,
+      "last_login": "2024-01-13T09:15:00Z",
+      "created_at": "2024-01-10T00:00:00Z",
+      "updated_at": "2024-01-13T09:15:00Z"
+    },
+    {
+      "id": 4,
+      "email": "guest@example.com",
+      "phone": "+254700000004",
+      "username": "guest_user",
+      "user_type": "guest",
+      "first_name": "Guest",
+      "last_name": "User",
+      "avatar_url": "https://ui-avatars.com/api/?name=Guest+User&background=6B7280&color=fff",
+      "email_verified": false,
+      "phone_verified": false,
+      "is_active": false,
+      "last_login": "2024-01-12T12:00:00Z",
+      "created_at": "2024-01-12T00:00:00Z",
+      "updated_at": "2024-01-12T12:00:00Z"
+    }
+  ],
+  "auth": {
+    "login": {
+      "admin@ussd.com": {
+        "user": {
+          "id": 1,
+          "email": "admin@ussd.com",
+          "phone": "+254700000001",
+          "username": "admin",
+          "user_type": "admin",
+          "first_name": "Admin",
+          "last_name": "User",
+          "avatar_url": "https://ui-avatars.com/api/?name=Admin+User&background=8B5CF6&color=fff",
+          "email_verified": true,
+          "phone_verified": true,
+          "is_active": true,
+          "last_login": "2024-01-15T10:30:00Z",
+          "created_at": "2024-01-01T00:00:00Z",
+          "updated_at": "2024-01-15T10:30:00Z"
+        },
+        "token": "mock-admin-jwt-token-12345"
+      },
+      "john@example.com": {
+        "user": {
+          "id": 2,
+          "email": "john@example.com",
+          "phone": "+254700000002",
+          "username": "john_doe",
+          "user_type": "subscribed",
+          "first_name": "John",
+          "last_name": "Doe",
+          "avatar_url": "https://ui-avatars.com/api/?name=John+Doe&background=10B981&color=fff",
+          "email_verified": true,
+          "phone_verified": true,
+          "is_active": true,
+          "last_login": "2024-01-14T15:20:00Z",
+          "created_at": "2024-01-05T00:00:00Z",
+          "updated_at": "2024-01-14T15:20:00Z"
+        },
+        "token": "mock-subscribed-jwt-token-12345"
+      },
+      "jane@example.com": {
+        "user": {
+          "id": 3,
+          "email": "jane@example.com",
+          "phone": "+254700000003",
+          "username": "jane_smith",
+          "user_type": "user",
+          "first_name": "Jane",
+          "last_name": "Smith",
+          "avatar_url": "https://ui-avatars.com/api/?name=Jane+Smith&background=3B82F6&color=fff",
+          "email_verified": true,
+          "phone_verified": false,
+          "is_active": true,
+          "last_login": "2024-01-13T09:15:00Z",
+          "created_at": "2024-01-10T00:00:00Z",
+          "updated_at": "2024-01-13T09:15:00Z"
+        },
+        "token": "mock-user-jwt-token-12345"
+      },
+      "guest@example.com": {
+        "user": {
+          "id": 4,
+          "email": "guest@example.com",
+          "phone": "+254700000004",
+          "username": "guest_user",
+          "user_type": "guest",
+          "first_name": "Guest",
+          "last_name": "User",
+          "avatar_url": "https://ui-avatars.com/api/?name=Guest+User&background=6B7280&color=fff",
+          "email_verified": false,
+          "phone_verified": false,
+          "is_active": false,
+          "last_login": "2024-01-12T12:00:00Z",
+          "created_at": "2024-01-12T00:00:00Z",
+          "updated_at": "2024-01-12T12:00:00Z"
+        },
+        "token": "mock-guest-jwt-token-12345"
+      }
+    }
+  },
+  "profiles": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "bio": "System Administrator",
+      "location": "Nairobi, Kenya",
+      "website": "https://ussd-autopay.com",
+      "social_links": {
+        "twitter": "@ussd_admin",
+        "linkedin": "ussd-admin"
+      },
+      "preferences": {
+        "notifications": true,
+        "newsletter": false,
+        "theme": "light"
+      }
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "bio": "Premium Subscriber",
+      "location": "Mombasa, Kenya",
+      "website": "",
+      "social_links": {
+        "twitter": "@john_doe",
+        "linkedin": "john-doe"
+      },
+      "preferences": {
+        "notifications": true,
+        "newsletter": true,
+        "theme": "dark"
+      }
     }
   ]
 }

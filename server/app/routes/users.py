@@ -7,10 +7,10 @@ from . import api_bp
 
 
 @api_bp.get("/users")
-def list_users():
+def search_users():
     phone = request.args.get("phone")
     pin = request.args.get("pin")
-    if mongo_db:
+    if mongo_db is not None:
         coll = mongo_db.get_collection("users")
         filter_q = {}
         if phone:
@@ -32,7 +32,7 @@ def list_users():
 @api_bp.post("/users")
 def create_user():
     payload = request.get_json(force=True) or {}
-    if mongo_db:
+    if mongo_db is not None:
         coll = mongo_db.get_collection("users")
         doc = {
             "phone": payload.get("phone"),

@@ -3,13 +3,19 @@ import { InfluencerList } from './components/InfluencerList';
 import { InfluencerDashboard } from './pages/InfluencerDashboard';
 import { SubscriberDashboard } from './pages/SubscriberDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
+import AdminUserManagement from './pages/AdminUserManagement';
+import AuthPage from './pages/AuthPage';
+import UserProfilePage from './pages/UserProfilePage';
+import SubscriptionPage from './pages/SubscriptionPage';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
-const App = () => {
+const AppContent = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  // Simulate admin status (replace with real auth logic as needed)
-  const isAdmin = false;
+  const { user, isAuthenticated, logout } = useAuth();
+  const isAdmin = user?.user_type === 'admin';
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -38,6 +44,7 @@ const App = () => {
               <>
                 <Link to="/dashboard" className="nav-link">Influencer Dashboard</Link>
                 <Link to="/admin" className="nav-link">Admin Dashboard</Link>
+                <Link to="/admin/users" className="nav-link">User Management</Link>
               </>
             )}
           </div>
@@ -53,8 +60,24 @@ const App = () => {
               />
             </div>
             <div className="navbar-auth">
-              <a href="/login" className="auth-link login-link">Login</a>
-              <a href="/signup" className="auth-link signup-link">Sign Up</a>
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-4">
+                  <Link to="/profile" className="auth-link">
+                    {user?.first_name || user?.email || 'Profile'}
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="auth-link text-red-600 hover:text-red-500"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="flex space-x-4">
+                  <Link to="/auth" className="auth-link login-link">Login</Link>
+                  <Link to="/auth" className="auth-link signup-link">Sign Up</Link>
+                </div>
+              )}
             </div>
           </div>
         </nav>
@@ -62,9 +85,42 @@ const App = () => {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<InfluencerList />} />
-            <Route path="/dashboard" element={<InfluencerDashboard />} />
-            <Route path="/subscriber" element={<SubscriberDashboard />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/profile" element={<UserProfilePage />} />
+            <Route path="/subscription" element={<SubscriptionPage />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute requiredUserType="user">
+                  <InfluencerDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/subscriber" 
+              element={
+                <ProtectedRoute requiredUserType="subscribed">
+                  <SubscriberDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute requiredUserType="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/users" 
+              element={
+                <ProtectedRoute requiredUserType="admin">
+                  <AdminUserManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
 
@@ -77,6 +133,10 @@ const App = () => {
       </div>
     </Router>
   );
+};
+
+const App = () => {
+  return <AppContent />;
 };
 
 export default App;

@@ -18,9 +18,23 @@ try:
     
     uri = os.getenv("MONGO_URI")
     if uri:
-        client = MongoClient(uri)
-        # ping
-        client.admin.command("ping")
+        # Configure MongoDB client with better timeout settings
+        client = MongoClient(
+            uri,
+            serverSelectionTimeoutMS=30000,  # 30 seconds
+            connectTimeoutMS=20000,          # 20 seconds
+            socketTimeoutMS=20000,           # 20 seconds
+            maxPoolSize=10,
+            retryWrites=True,
+            retryReads=True
+        )
+        # ping with timeout
+        try:
+            client.admin.command("ping", serverSelectionTimeoutMS=10000)
+        except Exception as ping_error:
+            print(f"DEBUG: MongoDB ping failed: {ping_error}")
+            # Continue anyway - the connection might still work for basic operations
+        
         # expose client via extensions module so routes/seeder can use it
         _ext.mongo_client = client
         # determine db name: prefer URI path, then env MONGO_DB_NAME, then fallback
@@ -41,7 +55,9 @@ try:
         print("DEBUG: No MONGO_URI found")
 except Exception as e:
     print(f"DEBUG: MongoDB initialization failed: {e}")
-    pass
+    print("DEBUG: Continuing without MongoDB - some features may not work")
+    _ext.mongo_client = None
+    _ext.mongo_db = None
 
 from .routes import api_bp
 from .routes.webhooks import webhooks_bp
@@ -63,7 +79,13 @@ def create_app() -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    cors.init_app(app, resources={r"/*": {"origins": app.config.get("CORS_ALLOW_ORIGINS", "*")}})
+    # Parse CORS origins from environment
+    cors_origins = app.config.get("CORS_ALLOW_ORIGINS", "*")
+    if cors_origins != "*":
+        # Split comma-separated origins and strip whitespace
+        cors_origins = [origin.strip() for origin in cors_origins.split(",")]
+    
+    cors.init_app(app, resources={r"/*": {"origins": cors_origins}})
 
     app.register_blueprint(api_bp, url_prefix="/api")
     app.register_blueprint(webhooks_bp, url_prefix="/webhooks")

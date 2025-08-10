@@ -1,5 +1,5 @@
 {
-  "name": "ussd-auto-credit-frontend",
+  "name": "ussd-credit-frontend",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -17,11 +17,9 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
-    "@types/node": "^24.2.1",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "autoprefixer": "^10.4.21",
-    "json-server": "^1.0.0-beta.3",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11"
   },
@@ -29,8 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "mock-api": "json-server --watch db.json --port 3001"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [

@@ -18,8 +18,12 @@ export const useInfluencers = () => {
     let isMounted = true;
     const fetchInfluencers = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8001'}/api/influencers`);
-        if (isMounted) setInfluencers(response.data);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'}/api/influencers`);
+        const items = (response.data || []).map((x: any) => ({
+          ...x,
+          imageUrl: x.imageUrl ?? x.image_url ?? '',
+        }));
+        if (isMounted) setInfluencers(items);
       } catch (err) {
         if (isMounted) setError(err as Error);
       } finally {
@@ -28,11 +32,10 @@ export const useInfluencers = () => {
     };
 
     fetchInfluencers();
-    const interval = setInterval(fetchInfluencers, 5000); // Poll every 5 seconds
+    // Removed the setInterval that was causing continuous API calls
 
     return () => {
       isMounted = false;
-      clearInterval(interval);
     };
   }, []);
 
