@@ -42,11 +42,17 @@ def jwt_required(f):
                     return jsonify({'message': 'User not found'}), 401
                 current_user = user_doc
             else:
-                # Fallback to SQLAlchemy
-                current_user = User.query.get(current_user_id)
-                if not current_user:
-                    return jsonify({'message': 'User not found'}), 401
-                current_user = current_user.to_dict()
+                # Fallback to in-memory storage
+                if hasattr(api_bp, '_users_db'):
+                    current_user = next((u for u in api_bp._users_db if u['id'] == current_user_id), None)
+                    if not current_user:
+                        return jsonify({'message': 'User not found'}), 401
+                else:
+                    # Fallback to SQLAlchemy
+                    current_user = User.query.get(current_user_id)
+                    if not current_user:
+                        return jsonify({'message': 'User not found'}), 401
+                    current_user = current_user.to_dict()
             
             # Check if user is active
             if not current_user.get('is_active', True):
@@ -136,8 +142,56 @@ def register():
             }
         }), 201
     
-    # Fallback to SQLAlchemy (not implemented for this POC)
-    return jsonify({'message': 'Registration not available'}), 500
+    # Fallback to in-memory storage when MongoDB is not available
+    try:
+        # Try to access the in-memory users database from admin_setup
+        if hasattr(api_bp, '_users_db'):
+            # Check if user already exists
+            existing_user = next((u for u in api_bp._users_db if u['email'] == email), None)
+            if existing_user:
+                return jsonify({'message': 'Email already registered'}), 409
+            
+            # Create new user
+            new_user = {
+                "id": len(api_bp._users_db) + 1,
+                "email": email,
+                "password_hash": generate_password_hash(password),
+                "first_name": first_name,
+                "last_name": last_name,
+                "user_type": data.get("user_type", "user"),  # Allow custom user type
+                "email_verified": False,
+                "phone_verified": False,
+                "is_active": True,
+                "is_suspended": False,
+                "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat()
+            }
+            
+            api_bp._users_db.append(new_user)
+            
+            # Generate JWT token
+            token = jwt.encode({
+                'user_id': new_user['id'],
+                'user_type': new_user['user_type'],
+                'exp': datetime.utcnow() + timedelta(hours=24)
+            }, current_app.config['JWT_SECRET_KEY'], algorithm='HS256')
+            
+            return jsonify({
+                'message': 'User registered successfully',
+                'token': token,
+                'user': {
+                    'id': new_user['id'],
+                    'email': new_user['email'],
+                    'first_name': new_user['first_name'],
+                    'last_name': new_user['last_name'],
+                    'user_type': new_user['user_type']
+                }
+            }), 201
+        else:
+            return jsonify({'message': 'No user database available'}), 500
+            
+    except Exception as e:
+        return jsonify({'message': f'Registration error: {str(e)}'}), 500
 
 @api_bp.post("/auth/login")
 @cross_origin()
@@ -191,7 +245,50 @@ def login():
             }
         }), 200
     
-    return jsonify({'message': 'Login not available'}), 500
+    # Fallback to in-memory storage when MongoDB is not available
+    try:
+        # Try to access the in-memory users database from admin_setup
+        if hasattr(api_bp, '_users_db'):
+            # Find user by email
+            user = next((u for u in api_bp._users_db if u['email'] == email), None)
+            if not user:
+                return jsonify({'message': 'Invalid credentials'}), 401
+            
+            # Check password
+            if not check_password_hash(user['password_hash'], password):
+                return jsonify({'message': 'Invalid credentials'}), 401
+            
+            # Check if account is active
+            if not user.get('is_active', True):
+                return jsonify({'message': 'Account is suspended'}), 401
+            
+            # Update last login
+            user['last_login'] = datetime.utcnow().isoformat()
+            
+            # Generate JWT token
+            token = jwt.encode({
+                'user_id': user['id'],
+                'user_type': user['user_type'],
+                'exp': datetime.utcnow() + timedelta(hours=24)
+            }, current_app.config['JWT_SECRET_KEY'], algorithm='HS256')
+            
+            return jsonify({
+                'message': 'Login successful',
+                'token': token,
+                'user': {
+                    'id': user['id'],
+                    'email': user['email'],
+                    'first_name': user['first_name'],
+                    'last_name': user['last_name'],
+                    'user_type': user['user_type'],
+                    'avatar_url': user.get('avatar_url')
+                }
+            }), 200
+        else:
+            return jsonify({'message': 'No user database available'}), 500
+            
+    except Exception as e:
+        return jsonify({'message': f'Login error: {str(e)}'}), 500
 
 @api_bp.post("/auth/google")
 @cross_origin()
