@@ -92,15 +92,11 @@ const AppContent = () => {
             className={`navbar-links navbar-links-center ${isMobileMenuOpen ? 'mobile-open' : ''}`}
           >
             <Link to="/" className="nav-link" onClick={handleNavClick}>Home</Link>
-            <a href="#" className="nav-link" onClick={handleNavClick}>Features</a>
-            <a href="#" className="nav-link" onClick={handleNavClick}>Pricing</a>
-            <a href="#" className="nav-link" onClick={handleNavClick}>Contact</a>
-            <Link to="/subscriber" className="nav-link" onClick={handleNavClick}>Subscriber Dashboard</Link>
+            <Link to="/subscriber" className="nav-link" onClick={handleNavClick}>Subscriber</Link>
             {isAdmin && (
               <>
-                <Link to="/dashboard" className="nav-link" onClick={handleNavClick}>Influencer Dashboard</Link>
-                <Link to="/admin" className="nav-link" onClick={handleNavClick}>Admin Dashboard</Link>
-                <Link to="/admin/users" className="nav-link" onClick={handleNavClick}>User Management</Link>
+                <Link to="/dashboard" className="nav-link" onClick={handleNavClick}>Dashboard</Link>
+                <Link to="/admin" className="nav-link" onClick={handleNavClick}>Admin</Link>
               </>
             )}
             {/* Mobile-only auth links */}
@@ -136,12 +132,12 @@ const AppContent = () => {
                 className="search-input"
                 placeholder="Search"
                 readOnly
-                style={{ width: '120px' }}
+                style={{ width: '100px' }}
               />
             </div>
             <div className="navbar-auth">
               {isAuthenticated ? (
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
                   <Link to="/profile" className="auth-link">
                     {user?.first_name || user?.email || 'Profile'}
                   </Link>
@@ -153,7 +149,7 @@ const AppContent = () => {
                   </button>
                 </div>
               ) : (
-                <div className="flex space-x-4">
+                <div className="flex space-x-3">
                   <Link to="/auth" className="auth-link login-link">Login</Link>
                   <Link to="/auth" className="auth-link signup-link">Sign Up</Link>
                 </div>

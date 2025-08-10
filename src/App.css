@@ -127,7 +127,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -135,41 +135,41 @@
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .navbar-logo {
-  height: 40px;
+  height: 36px;
   width: auto;
 }
 
 .platform-name {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
   color: #2c3e50;
 }
 
 .navbar-links {
   display: flex;
-  gap: 20px;
+  gap: 16px;
 }
 
 .navbar-links-center {
   flex: 1;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .navbar-auth-search {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .navbar-auth {
   display: flex;
-  gap: 15px;
+  gap: 12px;
 }
 
 .nav-link {
@@ -177,10 +177,13 @@
   color: #34495e;
   font-weight: 500;
   transition: color 0.3s;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
 }
 
 .nav-link:hover {
   color: #3498db;
+  background-color: #f8f9fa;
 }
 
 .navbar-search {
@@ -190,11 +193,11 @@
 }
 
 .search-input {
-  width: 220px;
-  padding: 8px 14px;
+  width: 100px;
+  padding: 6px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   transition: border-color 0.3s;
 }
 
@@ -205,12 +208,13 @@
 }
 
 .auth-link {
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 4px;
   text-decoration: none;
   font-weight: 500;
   color: #333;
   transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
 .auth-link:hover {
@@ -286,8 +290,8 @@
 @media (max-width: 768px) {
   .navbar {
     flex-direction: row;
-    padding: 0.75rem;
-    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
     position: relative;
     align-items: center;
   }
@@ -296,6 +300,14 @@
     order: 1;
     flex: 1;
     justify-content: flex-start;
+  }
+  
+  .navbar-logo {
+    height: 32px;
+  }
+  
+  .platform-name {
+    font-size: 1rem;
   }
   
   .mobile-menu-toggle {
@@ -322,17 +334,19 @@
     z-index: 999;
     max-height: calc(100vh - 70px);
     overflow-y: auto;
+    gap: 0;
   }
   
   .nav-link {
     font-size: 1rem;
-    padding: 0.75rem 0;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid #eee;
     width: 100%;
-    text-align: center;
+    text-align: left;
     transition: background-color 0.2s ease;
     cursor: pointer;
     user-select: none;
+    border-radius: 0;
   }
   
   .nav-link:last-child {
@@ -351,7 +365,7 @@
   
   .mobile-auth-links .nav-link {
     border-bottom: none;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1rem;
   }
   
   .navbar-auth-search {
@@ -369,7 +383,28 @@
 
 @media (min-width: 769px) {
   .navbar {
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .navbar-links-center {
+    gap: 12px;
+  }
+  
+  .nav-link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .search-input {
+    width: 90px;
+    padding: 5px 8px;
+  }
+  
+  .auth-link {
+    padding: 5px 10px;
+    font-size: 0.85rem;
   }
 }
 
