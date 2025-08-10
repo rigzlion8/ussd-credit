@@ -116,7 +116,16 @@ const AppContent = () => {
                     Logout
                   </button>
                 </>
-              ) : null}
+              ) : (
+                <div className="mobile-auth-buttons">
+                  <Link to="/auth" className="nav-link mobile-login-btn" onClick={handleNavClick}>
+                    Login
+                  </Link>
+                  <Link to="/auth" className="nav-link mobile-signup-btn" onClick={handleNavClick}>
+                    Sign Up
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
           
