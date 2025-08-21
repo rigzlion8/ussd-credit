@@ -145,6 +145,15 @@ def register():
     # Fallback to in-memory storage when MongoDB is not available
     try:
         # Try to access the in-memory users database from admin_setup
+        if not hasattr(api_bp, '_users_db'):
+            # Try to initialize the database
+            try:
+                from .admin_setup import init_users_db
+                init_users_db()
+            except Exception as e:
+                print(f"Failed to initialize users database: {e}")
+                return jsonify({'message': 'No user database available. Please contact administrator.'}), 500
+        
         if hasattr(api_bp, '_users_db'):
             # Check if user already exists
             existing_user = next((u for u in api_bp._users_db if u['email'] == email), None)
@@ -188,9 +197,10 @@ def register():
                 }
             }), 201
         else:
-            return jsonify({'message': 'No user database available'}), 500
+            return jsonify({'message': 'No user database available. Please contact administrator.'}), 500
             
     except Exception as e:
+        print(f"Registration error: {e}")
         return jsonify({'message': f'Registration error: {str(e)}'}), 500
 
 @api_bp.post("/auth/login")
@@ -248,7 +258,16 @@ def login():
     # Fallback to in-memory storage when MongoDB is not available
     try:
         # Try to access the in-memory users database from admin_setup
-        if hasattr(api_bp, '_users_db'):
+        if not hasattr(api_bp, '_users_db'):
+            # Try to initialize the database
+            try:
+                from .admin_setup import init_users_db
+                init_users_db()
+            except Exception as e:
+                print(f"Failed to initialize users database: {e}")
+                return jsonify({'message': 'No user database available. Please contact administrator.'}), 500
+        
+        if hasattr(api_bp, '_users_db') and api_bp._users_db:
             # Find user by email
             user = next((u for u in api_bp._users_db if u['email'] == email), None)
             if not user:
@@ -285,9 +304,10 @@ def login():
                 }
             }), 200
         else:
-            return jsonify({'message': 'No user database available'}), 500
+            return jsonify({'message': 'No user database available. Please contact administrator.'}), 500
             
     except Exception as e:
+        print(f"Login error: {e}")
         return jsonify({'message': f'Login error: {str(e)}'}), 500
 
 @api_bp.post("/auth/google")
