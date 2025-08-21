@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 from .config import get_config
-from .extensions import db, migrate, jwt, cors
+from .extensions import db, migrate, jwt, cors, init_mongodb
 
 # Load env from server/.env when running locally
 env_path = Path(__file__).resolve().parents[1] / ".env"
@@ -23,6 +23,10 @@ def create_app() -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    
+    # Initialize MongoDB
+    init_mongodb(app)
+    
     # Parse CORS origins from environment
     cors_origins = app.config.get("CORS_ALLOW_ORIGINS", "*")
     if cors_origins != "*":
