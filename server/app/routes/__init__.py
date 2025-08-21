@@ -21,25 +21,26 @@ try:
 except Exception as e:
     print(f"DEBUG: Failed to import subscribers_simple: {e}")
 
-# Temporarily comment out potentially conflicting modules
-# try:
-#     print("DEBUG: Importing users module...")
-#     from . import users  # noqa: E402, F401
-#     print("DEBUG: Successfully imported users")
-# except Exception as e:
-#     print(f"DEBUG: Failed to import users: {e}")
+try:
+    print("DEBUG: Importing users module...")
+    from . import users  # noqa: E402, F401
+    print("DEBUG: Successfully imported users")
+except Exception as e:
+    print(f"DEBUG: Failed to import users: {e}")
 
-# try:
-#     print("DEBUG: Importing auth module...")
-#     from . import auth  # noqa: F401
-#     print("DEBUG: Failed to import auth: {e}")
+try:
+    print("DEBUG: Importing auth module...")
+    from . import auth  # noqa: F401
+    print("DEBUG: Successfully imported auth")
+except Exception as e:
+    print(f"DEBUG: Failed to import auth: {e}")
 
-# try:
-#     print("DEBUG: Importing admin module...")
-#     from . import admin  # noqa: F401
-#     print("DEBUG: Successfully imported admin")
-# except Exception as e:
-#     print(f"DEBUG: Failed to import admin: {e}")
+try:
+    print("DEBUG: Importing admin module...")
+    from . import admin  # noqa: F401
+    print("DEBUG: Successfully imported admin")
+except Exception as e:
+    print(f"DEBUG: Failed to import admin: {e}")
 
 try:
     print("DEBUG: Importing admin_influencers module...")
