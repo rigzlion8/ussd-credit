@@ -24,43 +24,23 @@ const AuthPage: React.FC = () => {
   const switchToRegister = () => setIsLogin(false);
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <div className="auth-header">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
           <img
-            className="auth-logo"
+            className="w-16 h-16 mx-auto mb-6"
             src="/logo.png"
-            alt="USSD AutoPay"
+            alt="USSD Credit Platform"
           />
-          <h1 className="auth-title">
-            {isLogin ? 'Sign in to your account' : 'Create your account'}
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {isLogin ? 'Welcome Back' : 'Create Account'}
           </h1>
-          <p className="auth-subtitle">
-            {isLogin ? (
-              <>
-                <span className="auth-switch-text">Or{' '}</span>
-                <button
-                  onClick={switchToRegister}
-                  className="auth-switch-button"
-                >
-                  create a new account
-                </button>
-              </>
-            ) : (
-              <>
-                <span className="auth-switch-text">Or{' '}</span>
-                <button
-                  onClick={switchToLogin}
-                  className="auth-switch-button"
-                >
-                  sign in to your existing account
-                </button>
-              </>
-            )}
+          <p className="text-gray-600">
+            {isLogin ? 'Sign in to your account' : 'Create your account'}
           </p>
         </div>
 
-        <div className="auth-form">
+        <div className="card">
           {isLogin ? (
             <LoginForm onSwitchToRegister={switchToRegister} />
           ) : (
@@ -68,14 +48,14 @@ const AuthPage: React.FC = () => {
           )}
         </div>
 
-        <div className="auth-terms">
-          <p>
+        <div className="text-center mt-6">
+          <p className="text-sm text-gray-600">
             By continuing, you agree to our{' '}
-            <a href="/terms" className="auth-terms-link">
+            <a href="/terms" className="text-primary-600 hover:text-primary-700 font-medium">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="/privacy" className="auth-terms-link">
+            <a href="/privacy" className="text-primary-600 hover:text-primary-700 font-medium">
               Privacy Policy
             </a>
           </p>

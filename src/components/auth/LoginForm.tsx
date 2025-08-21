@@ -40,22 +40,24 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
   };
 
   return (
-    <div className="auth-form-container">
-      <div className="auth-form-header">
-        <h2 className="auth-form-title">Welcome Back</h2>
-        <p className="auth-form-subtitle">Sign in to your account</p>
+    <div className="space-y-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-semibold text-gray-900">Sign In</h2>
+        <p className="text-gray-600 mt-2">Welcome back to your account</p>
       </div>
 
       {error && (
-        <div className="auth-error-message">
-          <span className="auth-error-icon">⚠️</span>
-          {error}
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <span className="text-red-500 mr-2">⚠️</span>
+            <span className="text-red-700 text-sm font-medium">{error}</span>
+          </div>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="auth-form-fields">
-        <div className="auth-form-group">
-          <label htmlFor="email" className="auth-label">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="email" className="form-label">
             Email Address
           </label>
           <input
@@ -63,37 +65,37 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="auth-input"
+            className="input-field"
             placeholder="Enter your email"
             required
           />
         </div>
 
-        <div className="auth-form-group">
-          <label htmlFor="password" className="auth-label">
+        <div>
+          <label htmlFor="password" className="form-label">
             Password
           </label>
-          <div className="auth-password-container">
+          <div className="relative">
             <input
               id="password"
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="auth-input"
+              className="input-field pr-10"
               placeholder="Enter your password"
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="auth-password-toggle"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
             >
               {showPassword ? (
-                <svg className="auth-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
                 </svg>
               ) : (
-                <svg className="auth-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
@@ -102,12 +104,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
           </div>
         </div>
 
-        <div className="auth-form-options">
-          <label className="auth-checkbox-container">
-            <input type="checkbox" className="auth-checkbox" />
-            <span className="auth-checkbox-label">Remember me</span>
+        <div className="flex items-center justify-between">
+          <label className="flex items-center">
+            <input type="checkbox" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" />
+            <span className="ml-2 text-sm text-gray-700">Remember me</span>
           </label>
-          <button type="button" className="auth-link-button">
+          <button type="button" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
             Forgot password?
           </button>
         </div>
@@ -115,39 +117,44 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
         <button
           type="submit"
           disabled={isLoading || !email || !password}
-          className="auth-submit-button"
+          className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
-            <>
-              <span className="auth-spinner"></span>
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
               Signing in...
-            </>
+            </div>
           ) : (
             'Sign In'
           )}
         </button>
       </form>
 
-      <div className="auth-divider">
-        <span className="auth-divider-text">Or continue with</span>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-2 bg-white text-gray-500">Or continue with</span>
+        </div>
       </div>
 
-      <div className="auth-google-section">
+      <div>
         <GoogleAuthButton
           onSuccess={handleGoogleSuccess}
           onError={handleGoogleError}
-          className="google-auth-button"
+          className="w-full"
         >
           Sign in with Google
         </GoogleAuthButton>
       </div>
 
-      <div className="auth-footer">
-        <p className="auth-footer-text">
+      <div className="text-center">
+        <p className="text-sm text-gray-600">
           Don't have an account?{' '}
           <button
             onClick={onSwitchToRegister}
-            className="auth-footer-link"
+            className="text-primary-600 hover:text-primary-700 font-medium"
           >
             Sign up
           </button>
