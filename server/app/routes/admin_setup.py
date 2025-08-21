@@ -106,11 +106,11 @@ def admin_setup():
     try:
         success = init_users_db()
         if success:
-            return jsonify({
+        return jsonify({
                 'message': 'Admin setup completed successfully',
                 'database': 'MongoDB',
                 'users_created': 3  # admin + 2 test users
-            }), 200
+        }), 200
         else:
             return jsonify({
                 'message': 'Admin setup failed',

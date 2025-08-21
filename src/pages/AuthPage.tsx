@@ -6,17 +6,19 @@ import { useAuth } from '../contexts/AuthContext';
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   // Redirect if already authenticated
   React.useEffect(() => {
-    if (isAuthenticated) {
-      const from = location.state?.from?.pathname || '/';
-      navigate(from, { replace: true });
+    if (isAuthenticated && user) {
+      // Redirect admin users to admin dashboard, others to home
+      const isAdmin = user.user_type === 'admin';
+      const redirectPath = isAdmin ? '/admin' : (location.state?.from?.pathname || '/');
+      navigate(redirectPath, { replace: true });
     }
-  }, [isAuthenticated, navigate, location]);
+  }, [isAuthenticated, user, navigate, location]);
 
   const switchToLogin = () => setIsLogin(true);
   const switchToRegister = () => setIsLogin(false);

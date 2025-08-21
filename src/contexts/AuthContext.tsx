@@ -44,6 +44,37 @@ const initialState: AuthState = {
   error: null,
 };
 
+// Helper function to get initial state
+const getInitialState = (): AuthState => {
+  const token = localStorage.getItem('authToken');
+  const userStr = localStorage.getItem('user');
+  
+  if (token && userStr) {
+    try {
+      const user = JSON.parse(userStr);
+      return {
+        user,
+        token,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      };
+    } catch (e) {
+      // If parsing fails, clear localStorage and return initial state
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+    }
+  }
+  
+  return {
+    user: null,
+    token: null,
+    isAuthenticated: false,
+    isLoading: false,
+    error: null,
+  };
+};
+
 // Reducer
 function authReducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
@@ -111,7 +142,7 @@ export interface RegisterData {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, initialState);
+  const [state, dispatch] = useReducer(authReducer, getInitialState());
 
   // Check authentication status on mount
   useEffect(() => {
@@ -173,6 +204,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         type: 'AUTH_SUCCESS',
         payload: { user, token }
       });
+      
+      // Debug: Log the new state after dispatch
+      console.log('🔐 AuthContext: Dispatch completed, checking state...');
+      setTimeout(() => {
+        console.log('🔐 AuthContext: Current state after login:', {
+          isAuthenticated: state.isAuthenticated,
+          user: state.user,
+          token: state.token
+        });
+      }, 100);
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Login failed';
       console.error('🔐 AuthContext: Login failed:', errorMessage, error);
