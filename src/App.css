@@ -162,10 +162,10 @@
   gap: 16px;
 }
 
-.navbar-auth-search {
+.navbar-right-section {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
 
 .navbar-auth {
