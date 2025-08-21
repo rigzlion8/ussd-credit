@@ -197,7 +197,16 @@ const AdminInfluencerManagement: React.FC = () => {
   };
 
   if (!user || user.user_type !== 'admin') {
-    return <ProtectedRoute />;
+    return (
+      <div className="admin-influencer-management">
+        <div className="header">
+          <h1>Access Denied</h1>
+        </div>
+        <div className="access-denied">
+          <p>You don't have permission to access this page. Admin access required.</p>
+        </div>
+      </div>
+    );
   }
 
   return (

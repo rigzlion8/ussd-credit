@@ -332,6 +332,17 @@
   font-size: 1rem;
 }
 
+.access-denied {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+.access-denied p {
+  font-size: 1.125rem;
+  margin: 0;
+}
+
 /* Responsive design */
 @media (max-width: 1024px) {
   .admin-influencer-management {
