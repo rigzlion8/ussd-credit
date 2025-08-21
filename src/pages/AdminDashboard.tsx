@@ -148,6 +148,43 @@ export const AdminDashboard = () => {
   return (
     <div className="admin-dashboard-container">
       <h1>Admin Dashboard</h1>
+      
+      {/* Navigation Links */}
+      <div className="admin-navigation" style={{
+        display: 'flex',
+        gap: '1rem',
+        marginBottom: '2rem',
+        padding: '1rem',
+        backgroundColor: '#f8fafc',
+        borderRadius: '0.5rem',
+        border: '1px solid #e2e8f0'
+      }}>
+        <a href="/admin/users" style={{
+          padding: '0.75rem 1.5rem',
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          textDecoration: 'none',
+          borderRadius: '0.5rem',
+          fontWeight: '600',
+          transition: 'all 0.2s ease'
+        }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
+           onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3b82f6'}>
+          👥 User Management
+        </a>
+        <a href="/admin/influencers" style={{
+          padding: '0.75rem 1.5rem',
+          backgroundColor: '#10b981',
+          color: 'white',
+          textDecoration: 'none',
+          borderRadius: '0.5rem',
+          fontWeight: '600',
+          transition: 'all 0.2s ease'
+        }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#059669'}
+           onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#10b981'}>
+          🎯 Influencer Management
+        </a>
+      </div>
+      
       <div className="admin-summary">
         <div>Total Received Today: <b>KSh {totalReceivedToday}</b></div>
       </div>

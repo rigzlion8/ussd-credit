@@ -167,7 +167,15 @@ export const influencerAPI = {
     api.put(`/api/influencers/${id}`, influencerData),
   
   // Delete influencer
-  delete: (id: number) => api.delete(`/api/influencers/${id}`)
+  delete: (id: number) => api.delete(`/api/influencers/${id}`),
+  
+  // Admin management functions
+  suspend: (id: number) => api.post(`/api/influencers/${id}/suspend`),
+  activate: (id: number) => api.post(`/api/influencers/${id}/activate`),
+  terminate: (id: number) => api.post(`/api/influencers/${id}/terminate`),
+  
+  // Get all shortcodes for admin reference
+  getShortcodes: () => api.get('/api/influencers/shortcodes')
 };
 
 // Subscription API endpoints

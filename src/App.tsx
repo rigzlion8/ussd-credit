@@ -4,6 +4,7 @@ import { InfluencerDashboard } from './pages/InfluencerDashboard';
 import { SubscriberDashboard } from './pages/SubscriberDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import AdminUserManagement from './pages/AdminUserManagement';
+import AdminInfluencerManagement from './pages/AdminInfluencerManagement';
 import AuthPage from './pages/AuthPage';
 import UserProfilePage from './pages/UserProfilePage';
 import SubscriptionPage from './pages/SubscriptionPage';
@@ -200,6 +201,14 @@ const AppContent = () => {
               element={
                 <ProtectedRoute requiredUserType="admin">
                   <AdminUserManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/influencers" 
+              element={
+                <ProtectedRoute requiredUserType="admin">
+                  <AdminInfluencerManagement />
                 </ProtectedRoute>
               } 
             />
