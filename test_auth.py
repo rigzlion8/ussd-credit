@@ -23,7 +23,33 @@ def test_auth():
     except Exception as e:
         print(f"Admin status error: {e}")
     
-    # Test 2: Try to login with correct admin credentials
+    # Test 2: Initialize the database
+    try:
+        print("\nInitializing database...")
+        response = requests.post(f"{base_url}/api/admin/setup")
+        print(f"Setup response: {response.status_code}")
+        if response.status_code == 200:
+            print("✅ Database initialized successfully!")
+            print(f"Response: {response.json()}")
+        else:
+            print(f"❌ Setup failed: {response.text}")
+            return
+    except Exception as e:
+        print(f"Setup error: {e}")
+        return
+    
+    # Test 3: Check status again
+    try:
+        response = requests.get(f"{base_url}/api/admin/status")
+        print(f"\nAdmin status after setup: {response.status_code}")
+        if response.status_code == 200:
+            print(f"Response: {response.json()}")
+        else:
+            print(f"Error: {response.text}")
+    except Exception as e:
+        print(f"Admin status error: {e}")
+    
+    # Test 4: Try to login with correct admin credentials
     try:
         login_data = {
             "email": "admin@ussd.com",  # Correct email from db.json
@@ -42,7 +68,7 @@ def test_auth():
     except Exception as e:
         print(f"Login error: {e}")
     
-    # Test 3: Try to login with wrong email (what you were using)
+    # Test 5: Try to login with wrong email (what you were using)
     try:
         login_data = {
             "email": "admin@ussd-credit.com",  # Wrong email

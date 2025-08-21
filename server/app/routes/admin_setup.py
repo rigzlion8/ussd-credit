@@ -8,19 +8,8 @@ from . import api_bp
 
 # Initialize in-memory users database
 def init_users_db():
-    """Initialize the in-memory users database from db.json"""
+    """Initialize the in-memory users database with default admin user"""
     try:
-        # Get the path to db.json (two levels up from server/app/routes)
-        project_root = Path(__file__).resolve().parents[2]
-        db_json_path = project_root / "db.json"
-        
-        if not db_json_path.exists():
-            print("No db.json found for admin setup")
-            return False
-            
-        with db_json_path.open() as f:
-            data = json.load(f)
-        
         # Initialize the in-memory database
         if not hasattr(api_bp, '_users_db'):
             api_bp._users_db = []
@@ -28,29 +17,66 @@ def init_users_db():
         # Clear existing data
         api_bp._users_db.clear()
         
-        # Add users from db.json
-        for user in data.get('users', []):
-            # Create a user record with password hash
-            # For now, use a default password: 'password123'
-            # In production, you should set proper passwords
-            user_record = {
-                'id': user['id'],
-                'email': user['email'],
-                'phone': user.get('phone', ''),
-                'username': user.get('username', ''),
-                'user_type': user['user_type'],
-                'first_name': user['first_name'],
-                'last_name': user['last_name'],
-                'avatar_url': user.get('avatar_url', ''),
-                'email_verified': user.get('email_verified', False),
-                'phone_verified': user.get('phone_verified', False),
-                'is_active': user.get('is_active', True),
-                'password_hash': generate_password_hash('password123'),  # Default password
-                'last_login': user.get('last_login'),
-                'created_at': user.get('created_at'),
-                'updated_at': user.get('updated_at')
+        # Create default admin user
+        admin_user = {
+            'id': 1,
+            'email': 'admin@ussd.com',
+            'phone': '+254700000001',
+            'username': 'admin',
+            'user_type': 'admin',
+            'first_name': 'Admin',
+            'last_name': 'User',
+            'avatar_url': 'https://ui-avatars.com/api/?name=Admin+User&background=8B5CF6&color=fff',
+            'email_verified': True,
+            'phone_verified': True,
+            'is_active': True,
+            'password_hash': generate_password_hash('password123'),  # Default password
+            'last_login': datetime.utcnow().isoformat(),
+            'created_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.utcnow().isoformat()
+        }
+        api_bp._users_db.append(admin_user)
+        
+        # Create additional test users
+        test_users = [
+            {
+                'id': 2,
+                'email': 'john@example.com',
+                'phone': '+254700000002',
+                'username': 'john_doe',
+                'user_type': 'subscribed',
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'avatar_url': 'https://ui-avatars.com/api/?name=John+Doe&background=10B981&color=fff',
+                'email_verified': True,
+                'phone_verified': True,
+                'is_active': True,
+                'password_hash': generate_password_hash('password123'),
+                'last_login': datetime.utcnow().isoformat(),
+                'created_at': datetime.utcnow().isoformat(),
+                'updated_at': datetime.utcnow().isoformat()
+            },
+            {
+                'id': 3,
+                'email': 'jane@example.com',
+                'phone': '+254700000003',
+                'username': 'jane_smith',
+                'user_type': 'user',
+                'first_name': 'Jane',
+                'last_name': 'Smith',
+                'avatar_url': 'https://ui-avatars.com/api/?name=Jane+Smith&background=3B82F6&color=fff',
+                'email_verified': True,
+                'phone_verified': False,
+                'is_active': True,
+                'password_hash': generate_password_hash('password123'),
+                'last_login': datetime.utcnow().isoformat(),
+                'created_at': datetime.utcnow().isoformat(),
+                'updated_at': datetime.utcnow().isoformat()
             }
-            api_bp._users_db.append(user_record)
+        ]
+        
+        for user in test_users:
+            api_bp._users_db.append(user)
         
         print(f"Admin setup: Initialized {len(api_bp._users_db)} users")
         return True
