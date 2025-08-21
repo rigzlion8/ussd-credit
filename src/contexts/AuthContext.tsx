@@ -30,7 +30,7 @@ interface AuthState {
 type AuthAction =
   | { type: 'AUTH_START' }
   | { type: 'AUTH_SUCCESS'; payload: { user: User; token: string } }
-  | { type: 'AUTH_FAILURE'; payload: string }
+  | { type: 'AUTH_FAILURE'; payload: string | null }
   | { type: 'AUTH_LOGOUT' }
   | { type: 'CLEAR_ERROR' }
   | { type: 'UPDATE_USER'; payload: User };
@@ -176,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else {
         // No token found, user is not authenticated
         console.log('🔐 AuthContext: No token found, user not authenticated');
-        dispatch({ type: 'AUTH_FAILURE', payload: '' });
+        dispatch({ type: 'AUTH_FAILURE', payload: null });
       }
     };
 

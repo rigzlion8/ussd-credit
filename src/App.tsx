@@ -101,7 +101,7 @@ const AppContent = () => {
               </svg>
             </button>
             
-            {/* Desktop Navigation Links */}
+            {/* Desktop Navigation Links - Hidden on Mobile */}
             <div className="hidden lg:flex items-center space-x-8">
               <Link to="/" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">Home</Link>
               <Link to="/subscriber" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">Subscriber</Link>
@@ -113,7 +113,7 @@ const AppContent = () => {
               )}
             </div>
             
-            {/* Desktop Right Section */}
+            {/* Desktop Right Section - Hidden on Mobile */}
             <div className="hidden lg:flex items-center space-x-4">
               {/* Search */}
               <div className="relative">
@@ -154,79 +154,94 @@ const AppContent = () => {
             </div>
           </div>
           
-          {/* Mobile Menu */}
+          {/* Mobile Menu - Full Width Overlay */}
           <div 
             ref={mobileMenuRef}
-            className={`lg:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg transform transition-transform duration-300 ease-in-out ${
-              isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+            className={`lg:hidden fixed inset-0 top-[72px] bg-white z-50 transform transition-transform duration-300 ease-in-out ${
+              isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
-            <div className="px-4 py-6 space-y-4">
-              {/* Mobile Navigation Links */}
-              <div className="space-y-3">
-                <Link to="/" className="block text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors" onClick={handleNavClick}>
-                  Home
-                </Link>
-                <Link to="/subscriber" className="block text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors" onClick={handleNavClick}>
-                  Subscriber
-                </Link>
-                {isAdmin && (
-                  <>
-                    <Link to="/dashboard" className="block text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors" onClick={handleNavClick}>
-                      Dashboard
+            <div className="h-full overflow-y-auto">
+              <div className="px-4 py-6 space-y-6">
+                {/* Mobile Navigation Links */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Navigation</h3>
+                  <div className="space-y-3">
+                    <Link to="/" className="block text-gray-700 hover:text-primary-600 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors" onClick={handleNavClick}>
+                      🏠 Home
                     </Link>
-                    <Link to="/admin" className="block text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors" onClick={handleNavClick}>
-                      Admin
+                    <Link to="/subscriber" className="block text-gray-700 hover:text-primary-600 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors" onClick={handleNavClick}>
+                      👥 Subscriber
                     </Link>
-                  </>
-                )}
-              </div>
-              
-              {/* Mobile Search */}
-              <div className="pt-4 border-t border-gray-200">
-                <div className="relative">
-                  <input
-                    type="text"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="Search..."
-                    readOnly
-                  />
-                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+                    {isAdmin && (
+                      <>
+                        <Link to="/dashboard" className="block text-gray-700 hover:text-primary-600 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors" onClick={handleNavClick}>
+                          📊 Dashboard
+                        </Link>
+                        <Link to="/admin" className="block text-gray-700 hover:text-primary-600 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors" onClick={handleNavClick}>
+                          ⚙️ Admin
+                        </Link>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-              
-              {/* Mobile Auth */}
-              <div className="pt-4 border-t border-gray-200">
-                {isAuthenticated ? (
-                  <div className="space-y-3">
-                    <Link to="/profile" className="block text-gray-700 hover:text-primary-600 font-medium py-2 transition-colors" onClick={handleNavClick}>
-                      {user?.first_name || user?.email || 'Profile'}
-                    </Link>
-                    <button
-                      onClick={() => {
-                        logout();
-                        handleNavClick();
-                      }}
-                      className="block w-full text-left text-red-600 hover:text-red-700 font-medium py-2 transition-colors"
-                    >
-                      Logout
-                    </button>
+                
+                {/* Mobile Search */}
+                <div className="pt-4 border-t border-gray-200">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Search</h3>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="Search..."
+                      readOnly
+                    />
+                    <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    <Link to="/auth" className="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg font-medium transition-colors" onClick={handleNavClick}>
-                      Login
-                    </Link>
-                    <Link to="/auth" className="block w-full text-center border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white py-3 rounded-lg font-medium transition-colors" onClick={handleNavClick}>
-                      Sign Up
-                    </Link>
-                  </div>
-                )}
+                </div>
+                
+                {/* Mobile Auth */}
+                <div className="pt-4 border-t border-gray-200">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Account</h3>
+                  {isAuthenticated ? (
+                    <div className="space-y-3">
+                      <Link to="/profile" className="block text-gray-700 hover:text-primary-600 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors" onClick={handleNavClick}>
+                        👤 {user?.first_name || user?.email || 'Profile'}
+                      </Link>
+                      <button
+                        onClick={() => {
+                          logout();
+                          handleNavClick();
+                        }}
+                        className="block w-full text-left text-red-600 hover:text-red-700 font-medium py-3 px-4 rounded-lg hover:bg-red-50 transition-colors"
+                      >
+                        🚪 Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <Link to="/auth" className="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-lg font-medium transition-colors" onClick={handleNavClick}>
+                        🔑 Login
+                      </Link>
+                      <Link to="/auth" className="block w-full text-center border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white py-3 px-4 rounded-lg font-medium transition-colors" onClick={handleNavClick}>
+                        ✨ Sign Up
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
+          
+          {/* Mobile Menu Backdrop */}
+          {isMobileMenuOpen && (
+            <div 
+              className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+          )}
         </nav>
 
         <main className="main-content">
