@@ -28,17 +28,7 @@ api.interceptors.request.use(
 // Add response interceptor for better error handling
 api.interceptors.response.use(
   (response) => {
-    // Validate response data structure
-    if (response.data && typeof response.data === 'object') {
-      // Ensure data is always an array for list endpoints
-      if (Array.isArray(response.data)) {
-        return response;
-      }
-      // If data is an object but not an array, wrap it
-      if (response.config.url?.includes('/api/')) {
-        response.data = [response.data];
-      }
-    }
+    // Do not mutate response shape; callers expect the backend contract
     return response;
   },
   async (error) => {
