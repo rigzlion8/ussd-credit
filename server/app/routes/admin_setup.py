@@ -109,7 +109,7 @@ def admin_setup():
         return jsonify({
                 'message': 'Admin setup completed successfully',
                 'database': 'MongoDB',
-                'users_created': 3  # admin + 2 test users
+                'users_created': 3  # admin + 2 test user
         }), 200
         else:
             return jsonify({
