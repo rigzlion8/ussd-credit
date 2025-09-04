@@ -15,7 +15,7 @@ from . import api_bp
 @admin_required
 def list_users(current_user):
     """List all users (admin only)"""
-    if mongo_db:
+    if mongo_db is not None:
         # Get query parameters
         page = int(request.args.get('page', 1))
         per_page = int(request.args.get('per_page', 20))
@@ -84,7 +84,7 @@ def list_users(current_user):
 @admin_required
 def get_user(current_user, user_id):
     """Get specific user details (admin only)"""
-    if mongo_db:
+    if mongo_db is not None:
         user = mongo_db.get_collection("users").find_one(
             {"id": user_id},
             {'password_hash': 0}  # Exclude password hash
@@ -117,7 +117,7 @@ def update_user(current_user, user_id):
     """Update user details (admin only)"""
     data = request.get_json(force=True) or {}
     
-    if mongo_db:
+    if mongo_db is not None:
         # Check if user exists
         existing_user = mongo_db.get_collection("users").find_one({"id": user_id})
         if not existing_user:
@@ -153,7 +153,7 @@ def update_user(current_user, user_id):
 @admin_required
 def delete_user(current_user, user_id):
     """Delete user (admin only)"""
-    if mongo_db:
+    if mongo_db is not None:
         # Check if user exists
         existing_user = mongo_db.get_collection("users").find_one({"id": user_id})
         if not existing_user:
@@ -184,7 +184,7 @@ def delete_user(current_user, user_id):
 @admin_required
 def activate_user(current_user, user_id):
     """Activate suspended user (admin only)"""
-    if mongo_db:
+    if mongo_db is not None:
         # Check if user exists
         existing_user = mongo_db.get_collection("users").find_one({"id": user_id})
         if not existing_user:
@@ -221,7 +221,7 @@ def upgrade_user(current_user, user_id):
     if new_user_type not in valid_types:
         return jsonify({'message': f'Invalid user type. Must be one of: {", ".join(valid_types)}'}), 400
     
-    if mongo_db:
+    if mongo_db is not None:
         # Check if user exists
         existing_user = mongo_db.get_collection("users").find_one({"id": user_id})
         if not existing_user:
@@ -247,7 +247,7 @@ def upgrade_user(current_user, user_id):
 @admin_required
 def get_admin_stats(current_user):
     """Get system statistics (admin only)"""
-    if mongo_db:
+    if mongo_db is not None:
         try:
             # User statistics
             total_users = mongo_db.get_collection("users").count_documents({})
