@@ -39,7 +39,7 @@ def init_users_db():
             'email_verified': True,
             'phone_verified': True,
             'is_active': True,
-            'password_hash': generate_password_hash('password123'),  # Default password
+            'password_hash': generate_password_hash('Content101!'),  # Default password
             'last_login': datetime.utcnow(),
             'created_at': datetime.utcnow(),
             'updated_at': datetime.utcnow()
@@ -63,7 +63,7 @@ def init_users_db():
                 'email_verified': True,
                 'phone_verified': True,
                 'is_active': True,
-                'password_hash': generate_password_hash('password123'),
+                'password_hash': generate_password_hash('Content101!'),
                 'last_login': datetime.utcnow(),
                 'created_at': datetime.utcnow(),
                 'updated_at': datetime.utcnow()
@@ -80,7 +80,7 @@ def init_users_db():
                 'email_verified': True,
                 'phone_verified': False,
                 'is_active': True,
-                'password_hash': generate_password_hash('password123'),
+                'password_hash': generate_password_hash('Content101!'),
                 'last_login': datetime.utcnow(),
                 'created_at': datetime.utcnow(),
                 'updated_at': datetime.utcnow()

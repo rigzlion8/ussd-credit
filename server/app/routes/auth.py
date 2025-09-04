@@ -17,6 +17,9 @@ from . import api_bp
 def jwt_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # Allow CORS preflight without JWT
+        if request.method == 'OPTIONS':
+            return f({'id': None, 'user_type': 'guest'}, *args, **kwargs)
         token = None
         
         # Get token from header

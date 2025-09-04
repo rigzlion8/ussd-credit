@@ -33,7 +33,7 @@ def create_app() -> Flask:
         # Split comma-separated origins and strip whitespace
         cors_origins = [origin.strip() for origin in cors_origins.split(",")]
     
-    cors.init_app(app, resources={r"/*": {"origins": cors_origins}})
+    cors.init_app(app, resources={r"/*": {"origins": cors_origins}}, supports_credentials=True)
 
     # Try to register blueprints if they exist
     print("DEBUG: Starting blueprint registration...")

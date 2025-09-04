@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from flask_cors import cross_origin
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 # Try to import mongo_db, but don't fail if it's not available
 try:
     from ..extensions import mongo_db
@@ -10,8 +11,8 @@ from .auth import admin_required
 from . import api_bp
 
 @api_bp.get("/admin/users")
-@admin_required
 @cross_origin()
+@admin_required
 def list_users(current_user):
     """List all users (admin only)"""
     if mongo_db:
@@ -68,8 +69,8 @@ def list_users(current_user):
     return jsonify({'message': 'User management not available'}), 500
 
 @api_bp.get("/admin/users/<int:user_id>")
-@admin_required
 @cross_origin()
+@admin_required
 def get_user(current_user, user_id):
     """Get specific user details (admin only)"""
     if mongo_db:
@@ -99,8 +100,8 @@ def get_user(current_user, user_id):
     return jsonify({'message': 'User management not available'}), 500
 
 @api_bp.put("/admin/users/<int:user_id>")
-@admin_required
 @cross_origin()
+@admin_required
 def update_user(current_user, user_id):
     """Update user details (admin only)"""
     data = request.get_json(force=True) or {}
@@ -137,8 +138,8 @@ def update_user(current_user, user_id):
     return jsonify({'message': 'User management not available'}), 500
 
 @api_bp.delete("/admin/users/<int:user_id>")
-@admin_required
 @cross_origin()
+@admin_required
 def delete_user(current_user, user_id):
     """Delete user (admin only)"""
     if mongo_db:
@@ -168,8 +169,8 @@ def delete_user(current_user, user_id):
     return jsonify({'message': 'User management not available'}), 500
 
 @api_bp.post("/admin/users/<int:user_id>/activate")
-@admin_required
 @cross_origin()
+@admin_required
 def activate_user(current_user, user_id):
     """Activate suspended user (admin only)"""
     if mongo_db:
@@ -195,8 +196,8 @@ def activate_user(current_user, user_id):
     return jsonify({'message': 'User management not available'}), 500
 
 @api_bp.post("/admin/users/<int:user_id>/upgrade")
-@admin_required
 @cross_origin()
+@admin_required
 def upgrade_user(current_user, user_id):
     """Upgrade user type (admin only)"""
     data = request.get_json(force=True) or {}
@@ -231,8 +232,8 @@ def upgrade_user(current_user, user_id):
     return jsonify({'message': 'User management not available'}), 500
 
 @api_bp.get("/admin/stats")
-@admin_required
 @cross_origin()
+@admin_required
 def get_admin_stats(current_user):
     """Get system statistics (admin only)"""
     if mongo_db:
@@ -284,3 +285,34 @@ def get_admin_stats(current_user):
             return jsonify({'message': f'Error retrieving statistics: {str(e)}'}), 500
     
     return jsonify({'message': 'Statistics not available'}), 500
+
+@api_bp.post("/admin/users/<int:user_id>/set-password")
+@cross_origin()
+@admin_required
+def set_user_password(current_user, user_id):
+    """Set a user's password (admin only)"""
+    data = request.get_json(force=True) or {}
+    new_password = data.get('new_password')
+    if not new_password:
+        return jsonify({'message': 'new_password is required'}), 400
+    
+    if mongo_db:
+        # Check if user exists
+        existing_user = mongo_db.get_collection("users").find_one({"id": user_id})
+        if not existing_user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        # Update password hash
+        mongo_db.get_collection("users").update_one(
+            {"id": user_id},
+            {
+                "$set": {
+                    "password_hash": generate_password_hash(new_password),
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        return jsonify({'message': 'Password updated successfully'}), 200
+    
+    return jsonify({'message': 'User management not available'}), 500
