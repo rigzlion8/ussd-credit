@@ -44,16 +44,27 @@ def list_users(current_user):
             {'password_hash': 0}  # Exclude password hash
         ).skip(skip).limit(per_page).sort('created_at', -1))
         
-        # Convert ObjectId to string for JSON serialization
+        # Convert ObjectId and datetime fields safely for JSON serialization
         for user in users:
             if '_id' in user:
-                user['_id'] = str(user['_id'])
-            if 'created_at' in user:
-                user['created_at'] = user['created_at'].isoformat()
-            if 'updated_at' in user:
-                user['updated_at'] = user['updated_at'].isoformat()
-            if 'last_login' in user and user['last_login']:
-                user['last_login'] = user['last_login'].isoformat()
+                try:
+                    user['_id'] = str(user['_id'])
+                except Exception:
+                    pass
+            for field in ['created_at', 'updated_at', 'last_login']:
+                value = user.get(field)
+                if value is None:
+                    continue
+                try:
+                    # If it's a datetime, convert to ISO string
+                    if hasattr(value, 'isoformat'):
+                        user[field] = value.isoformat()
+                except Exception:
+                    # As a fallback, stringify unknown types
+                    try:
+                        user[field] = str(value)
+                    except Exception:
+                        pass
         
         return jsonify({
             'message': 'Users retrieved successfully',
