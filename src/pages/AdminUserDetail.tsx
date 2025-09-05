@@ -110,6 +110,8 @@ const AdminUserDetail: React.FC = () => {
     );
   }
 
+  const initials = `${(user?.first_name || '').charAt(0)}${(user?.last_name || '').charAt(0)}`.toUpperCase();
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -125,9 +127,16 @@ const AdminUserDetail: React.FC = () => {
           <div className="px-6 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1 text-center">
               <img
-                src={user.avatar_url || '/default-avatar.png'}
+                src={user.avatar_url || ''}
                 alt="Avatar"
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg mx-auto"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
+                  const fallback = document.createElement('div');
+                  fallback.className = 'w-32 h-32 rounded-full bg-gray-300 flex items-center justify-center border-4 border-white shadow-lg mx-auto';
+                  fallback.innerHTML = `<span class="text-2xl font-semibold text-gray-700">${initials || 'U'}</span>`;
+                  e.currentTarget.parentElement?.appendChild(fallback);
+                }}
               />
               <h2 className="mt-4 text-xl font-semibold">{user.first_name} {user.last_name}</h2>
               <p className="text-gray-600">{user.email}</p>

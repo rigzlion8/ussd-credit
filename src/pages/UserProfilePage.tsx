@@ -115,6 +115,8 @@ const UserProfilePage: React.FC = () => {
     return colors[userType as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
+  const initials = `${(user?.first_name || '').charAt(0)}${(user?.last_name || '').charAt(0)}`.toUpperCase();
+
   if (!user) {
     return null;
   }
@@ -145,9 +147,16 @@ const UserProfilePage: React.FC = () => {
                   <div className="text-center">
                     <div className="relative inline-block">
                       <img
-                        src={user.avatar_url || '/default-avatar.png'}
+                        src={user.avatar_url || ''}
                         alt="Profile"
                         className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          const fallback = document.createElement('div');
+                          fallback.className = 'w-32 h-32 rounded-full bg-gray-300 flex items-center justify-center border-4 border-white shadow-lg';
+                          fallback.innerHTML = `<span class="text-2xl font-semibold text-gray-700">${initials || 'U'}</span>`;
+                          e.currentTarget.parentElement?.appendChild(fallback);
+                        }}
                       />
                       {isEditing && (
                         <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 cursor-pointer">

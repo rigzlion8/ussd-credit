@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { influencerAPI } from '../lib/api';
 import './AdminInfluencerManagement.css';
+import { useNavigate } from 'react-router-dom';
 
 interface Influencer {
   id: number;
@@ -25,6 +26,7 @@ interface CreateInfluencerForm {
 
 const AdminInfluencerManagement: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [influencers, setInfluencers] = useState<Influencer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,6 +42,8 @@ const AdminInfluencerManagement: React.FC = () => {
     ussd_shortcode: '',
     imageUrl: ''
   });
+  const [createImageFile, setCreateImageFile] = useState<File | null>(null);
+  const [editImageFile, setEditImageFile] = useState<File | null>(null);
 
   // Fetch influencers from API
   useEffect(() => {
@@ -93,8 +97,15 @@ const AdminInfluencerManagement: React.FC = () => {
 
     try {
       const response = await influencerAPI.create(createForm);
-      setInfluencers(prev => [...prev, response.data]);
+      let created = response.data;
+      // If an image file is selected, upload it
+      if (createImageFile && created?.id) {
+        const up = await influencerAPI.uploadImage(created.id, createImageFile);
+        created = up.data?.influencer || created;
+      }
+      setInfluencers(prev => [...prev, created]);
       setCreateForm({ name: '', phone: '', ussd_shortcode: '', imageUrl: '' });
+      setCreateImageFile(null);
       setShowCreateForm(false);
       setMessage({ type: 'success', text: 'Influencer created successfully!' });
     } catch (error: any) {
@@ -113,11 +124,17 @@ const AdminInfluencerManagement: React.FC = () => {
     if (!editingInfluencer) return;
 
     try {
-      const response = await influencerAPI.update(editingInfluencer.id, editingInfluencer);
+      let updatedResp = await influencerAPI.update(editingInfluencer.id, editingInfluencer);
+      let updated = updatedResp.data;
+      if (editImageFile) {
+        const up = await influencerAPI.uploadImage(editingInfluencer.id, editImageFile);
+        updated = up.data?.influencer || updated;
+      }
       setInfluencers(prev => 
-        prev.map(inf => inf.id === editingInfluencer.id ? response.data : inf)
+        prev.map(inf => inf.id === editingInfluencer.id ? updated : inf)
       );
       setEditingInfluencer(null);
+      setEditImageFile(null);
       setMessage({ type: 'success', text: 'Influencer updated successfully!' });
     } catch (error: any) {
       console.error('Failed to update influencer:', error);
@@ -212,7 +229,10 @@ const AdminInfluencerManagement: React.FC = () => {
   return (
     <div className="admin-influencer-management">
       <div className="header">
-        <h1>Influencer Management</h1>
+        <div className="flex items-center gap-3">
+          <button className="btn btn-secondary" onClick={() => navigate(-1)}>← Back</button>
+          <h1>Influencer Management</h1>
+        </div>
         <button 
           className="btn btn-primary"
           onClick={() => setShowCreateForm(true)}
@@ -289,7 +309,29 @@ const AdminInfluencerManagement: React.FC = () => {
               </div>
               
               <div className="form-group">
-                <label>Image URL</label>
+                <label>Image</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      if (editingInfluencer) setEditImageFile(file);
+                      else setCreateImageFile(file);
+                    }}
+                  />
+                  {(editingInfluencer?.imageUrl || createForm.imageUrl) && (
+                    <img
+                      src={(editingInfluencer?.imageUrl || createForm.imageUrl) as string}
+                      alt="preview"
+                      style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  )}
+                </div>
+                <small>Optional: you can still paste an Image URL.</small>
                 <input
                   type="url"
                   value={editingInfluencer ? editingInfluencer.imageUrl : createForm.imageUrl}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { adminAPI } from '../lib/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface AdminUser {
   id: number;
@@ -22,6 +22,7 @@ const AdminUserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const navigate = useNavigate();
 
   // Fetch users from real API
   useEffect(() => {
@@ -162,11 +163,16 @@ const AdminUserManagement: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white shadow rounded-lg">
             {/* Header */}
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-              <p className="mt-1 text-sm text-gray-600">
-                Manage all users in the system
-              </p>
+            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button className="px-3 py-2 border rounded-md text-sm" onClick={() => navigate(-1)}>← Back</button>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Manage all users in the system
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Filters and Search */}

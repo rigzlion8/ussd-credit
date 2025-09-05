@@ -174,7 +174,16 @@ export const influencerAPI = {
   terminate: (id: number) => api.post(`/api/influencers/${id}/terminate`),
   
   // Get all shortcodes for admin reference
-  getShortcodes: () => api.get('/api/influencers/shortcodes')
+  getShortcodes: () => api.get('/api/influencers/shortcodes'),
+
+  // Upload influencer image (admin)
+  uploadImage: (id: number, file: File) => {
+    const form = new FormData();
+    form.append('image', file);
+    return api.post(`/api/admin/influencers/${id}/avatar`, form, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  }
 };
 
 // Subscription API endpoints
