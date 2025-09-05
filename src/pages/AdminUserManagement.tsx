@@ -28,7 +28,11 @@ const AdminUserManagement: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await adminAPI.getUsers();
-        setUsers(response.data);
+        const payload: any = response?.data;
+        const usersArray: AdminUser[] = Array.isArray(payload)
+          ? payload
+          : (payload?.users ?? []);
+        setUsers(usersArray);
       } catch (error) {
         console.error('Failed to fetch users:', error);
         setMessage({ 
@@ -43,7 +47,8 @@ const AdminUserManagement: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const filteredUsers = users.filter(user => {
+  const safeUsers = Array.isArray(users) ? users : [];
+  const filteredUsers = safeUsers.filter(user => {
     const matchesSearch = user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.last_name.toLowerCase().includes(searchTerm.toLowerCase());

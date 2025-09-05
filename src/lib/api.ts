@@ -125,7 +125,7 @@ export const adminAPI = {
   
   // Deactivate user
   deactivateUser: (userId: number) => 
-    api.post(`/api/admin/users/${userId}/deactivate`)
+    api.delete(`/api/admin/users/${userId}`)
 };
 
 // User management API endpoints
