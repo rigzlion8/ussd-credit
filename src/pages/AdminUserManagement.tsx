@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { adminAPI } from '../lib/api';
+import { Link } from 'react-router-dom';
 
 interface AdminUser {
   id: number;
@@ -225,9 +226,7 @@ const AdminUserManagement: React.FC = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Last Login
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    {/* Actions column removed; actions will be in user detail page */}
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -244,7 +243,9 @@ const AdminUserManagement: React.FC = () => {
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {user.first_name} {user.last_name}
+                              <Link to={`/admin/users/${user.id}`} className="text-blue-600 hover:underline">
+                                {user.first_name} {user.last_name}
+                              </Link>
                             </div>
                             <div className="text-sm text-gray-500">{user.email}</div>
                           </div>
@@ -268,31 +269,7 @@ const AdminUserManagement: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {user.last_login ? new Date(user.last_login).toLocaleDateString() : 'Never'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleUserStatusToggle(user.id)}
-                            className={`px-3 py-1 rounded text-xs ${
-                              user.is_active 
-                                ? 'bg-red-100 text-red-700 hover:bg-red-200' 
-                                : 'bg-green-100 text-green-700 hover:bg-green-200'
-                            }`}
-                          >
-                            {user.is_active ? 'Deactivate' : 'Activate'}
-                          </button>
-                          <select
-                            value={user.user_type}
-                            onChange={(e) => handleUserTypeChange(user.id, e.target.value)}
-                            className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-blue-500"
-                            disabled={user.id === 1} // Don't allow changing admin's own type
-                          >
-                            <option value="guest">Guest</option>
-                            <option value="user">Free User</option>
-                            <option value="subscribed">Premium</option>
-                            <option value="admin">Admin</option>
-                          </select>
-                        </div>
-                      </td>
+                      {/* Actions moved to detail page */}
                     </tr>
                   ))}
                 </tbody>

@@ -12,6 +12,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AdminUserDetail from './pages/AdminUserDetail';
 
 const AppContent = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -284,6 +285,14 @@ const AppContent = () => {
               element={
                 <ProtectedRoute requiredUserType="admin">
                   <AdminInfluencerManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/users/:userId" 
+              element={
+                <ProtectedRoute requiredUserType="admin">
+                  <AdminUserDetail />
                 </ProtectedRoute>
               } 
             />

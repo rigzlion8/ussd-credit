@@ -100,7 +100,16 @@ export const authAPI = {
   refreshToken: () => api.post('/api/auth/refresh'),
   
   // Logout
-  logout: () => api.post('/api/auth/logout')
+  logout: () => api.post('/api/auth/logout'),
+
+  // Upload avatar
+  uploadAvatar: (file: File) => {
+    const form = new FormData();
+    form.append('avatar', file);
+    return api.post('/api/auth/avatar', form, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  }
 };
 
 // Admin API endpoints

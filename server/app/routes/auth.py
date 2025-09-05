@@ -1,9 +1,10 @@
-from flask import jsonify, request, current_app, url_for, redirect
+from flask import jsonify, request, current_app, url_for, redirect, send_from_directory
 from flask_cors import cross_origin
 from functools import wraps
 import jwt
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import requests
 # Try to import mongo_db, but don't fail if it's not available
 try:
@@ -434,5 +435,59 @@ def logout(current_user):
     # In a real application, you might blacklist the token
     # For now, just return success
     return jsonify({'message': 'Logged out successfully'}), 200
+
+
+# Avatar upload and serving
+@api_bp.post("/auth/avatar")
+@jwt_required
+@cross_origin()
+def upload_avatar(current_user):
+    """Upload user avatar and update avatar_url."""
+    try:
+        if 'avatar' not in request.files:
+            return jsonify({'message': 'avatar file is required'}), 400
+        file = request.files['avatar']
+        if not file or file.filename == '':
+            return jsonify({'message': 'No file selected'}), 400
+
+        filename = secure_filename(file.filename)
+        # Ensure unique filename
+        unique_prefix = f"u{current_user.get('id', 'x')}_{int(datetime.utcnow().timestamp())}"
+        name, ext = (filename.rsplit('.', 1) + [''])[:2]
+        final_name = f"{unique_prefix}.{ext.lower()}" if ext else unique_prefix
+
+        # Determine upload directory (server/uploads/avatars)
+        from pathlib import Path
+        base_dir = Path(current_app.root_path).parents[1]
+        upload_dir = base_dir / 'uploads' / 'avatars'
+        upload_dir.mkdir(parents=True, exist_ok=True)
+
+        # Save file
+        file_path = upload_dir / final_name
+        file.save(str(file_path))
+
+        # Public URL served by /uploads/avatars/<filename>
+        public_url = url_for('serve_avatar', filename=final_name, _external=True)
+
+        # Update user avatar_url in Mongo
+        if mongo_db is not None and current_user.get('id') is not None:
+            mongo_db.get_collection('users').update_one(
+                {"id": current_user['id']},
+                {"$set": {"avatar_url": public_url, "updated_at": datetime.utcnow()}}
+            )
+
+        return jsonify({'message': 'Avatar uploaded successfully', 'avatar_url': public_url}), 200
+    except Exception as e:
+        return jsonify({'message': f'Avatar upload failed: {str(e)}'}), 500
+
+
+# Serve uploaded avatars from server/uploads/avatars
+@api_bp.get('/uploads/avatars/<path:filename>')
+@cross_origin()
+def serve_avatar(filename):
+    from pathlib import Path
+    base_dir = Path(current_app.root_path).parents[1]
+    upload_dir = base_dir / 'uploads' / 'avatars'
+    return send_from_directory(str(upload_dir), filename, as_attachment=False)
 
 

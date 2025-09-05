@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import { authAPI } from '../lib/api';
 
 const UserProfilePage: React.FC = () => {
   const { user, updateProfile, changePassword, logout } = useAuth();
@@ -19,6 +20,7 @@ const UserProfilePage: React.FC = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -71,6 +73,25 @@ const UserProfilePage: React.FC = () => {
       setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to change password' });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleAvatarSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploadingAvatar(true);
+      const res = await authAPI.uploadAvatar(file);
+      const newUrl = res.data?.avatar_url;
+      if (newUrl) {
+        setFormData(prev => ({ ...prev, avatar_url: newUrl }));
+        await updateProfile({ avatar_url: newUrl });
+        setMessage({ type: 'success', text: 'Avatar updated!' });
+      }
+    } catch (err) {
+      setMessage({ type: 'error', text: 'Failed to upload avatar' });
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
@@ -129,11 +150,12 @@ const UserProfilePage: React.FC = () => {
                         className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
                       />
                       {isEditing && (
-                        <button className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700">
+                        <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 cursor-pointer">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                           </svg>
-                        </button>
+                          <input type="file" accept="image/*" onChange={handleAvatarSelected} className="hidden" />
+                        </label>
                       )}
                     </div>
                     
