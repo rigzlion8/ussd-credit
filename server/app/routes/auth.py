@@ -13,6 +13,40 @@ except ImportError:
 from ..models.user import User, UserType
 from . import api_bp
 
+# Helper to serialize MongoDB user documents for JSON responses
+def _serialize_user_document(user_doc):
+    if not isinstance(user_doc, dict):
+        return user_doc
+    serialized = {}
+    fields = [
+        'id', 'email', 'first_name', 'last_name', 'user_type', 'avatar_url',
+        'email_verified', 'phone_verified', 'is_active', 'username'
+    ]
+    for key in fields:
+        if key in user_doc:
+            serialized[key] = user_doc[key]
+    # Convert special fields
+    if '_id' in user_doc:
+        try:
+            serialized['_id'] = str(user_doc['_id'])
+        except Exception:
+            pass
+    for dt_key in ['created_at', 'updated_at', 'last_login']:
+        value = user_doc.get(dt_key)
+        if value is None:
+            continue
+        try:
+            if hasattr(value, 'isoformat'):
+                serialized[dt_key] = value.isoformat()
+            else:
+                serialized[dt_key] = str(value)
+        except Exception:
+            try:
+                serialized[dt_key] = str(value)
+            except Exception:
+                pass
+    return serialized
+
 # JWT token decorator for protected routes
 def jwt_required(f):
     @wraps(f)
@@ -300,9 +334,10 @@ def google_login():
 @cross_origin()
 def get_profile(current_user):
     """Get current user profile"""
+    user_out = _serialize_user_document(current_user)
     return jsonify({
         'message': 'Profile retrieved successfully',
-        'user': current_user
+        'user': user_out
     }), 200
 
 @api_bp.put("/auth/profile")
